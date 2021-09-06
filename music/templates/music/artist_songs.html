@@ -1,0 +1,8 @@
+{% extends 'music/songs.html' %}
+
+{% block artist %}
+    <div class="text-center">
+        <img class='large-logo' src="{{ songs.first.artist.logo.url }}" alt="">
+        <p>{{ songs.first.artist }}</p>
+    </div>    
+{% endblock%}

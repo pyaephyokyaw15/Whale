@@ -27,4 +27,12 @@ class Song(models.Model):
     def __str__(self):
         return self.title + '-' + self.artist.name
 
+class Playlist(models.Model):
+    title = models.CharField(max_length=250)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    songs = models.ManyToManyField(Song)
+    
+    def __str__(self):
+        return self.title
+
 

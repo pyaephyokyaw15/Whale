@@ -16,9 +16,26 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import include
 from django.urls import path
-from music import views
+from django.contrib.auth import views as auth_views
+from user import views as user_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include('music.urls')),
+    path('admin/', admin.site.urls),
+    path('login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
+    path('register/', user_views.register, name='register'), 
+
+    # We can leave templave_name in logout. 
+    # If so, it will logout and when we login again, it will take to admin login.
+    # Not user login.
+    # So, to get customize, we create logout.html.
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

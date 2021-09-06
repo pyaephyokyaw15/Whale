@@ -1,0 +1,70 @@
+.song, .artist {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    font-size: 14px;
+}
+
+.song{
+    font-size:16px;
+}
+
+
+.small-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+}
+
+.logo{
+    width: 80px;
+    height: 45px;
+    background-color: inherit;
+    padding: 0px;
+    margin: 0px;
+}
+nav-item{
+    margin: 20px;
+}
+.large-logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+    margin: 20px;
+  
+}
+.navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .show>.nav-link{
+    background-color: rgb(46, 165, 42);
+}
+.flex-item{
+    margin: 20px;
+}
+
+.navbar-nav .nav-link {
+padding-top: 0;
+padding-bottom: 0;
+height: 50px;
+line-height: 50px;
+}
+
+#upper-icon{
+
+    font-size: 24px;
+    vertical-align: -6px;   
+}
+
+.inline{
+    display: inline;
+}
+
+tr{
+    cursor: pointer;
+}
+
+
+.fa-play-circle{
+    color:black;
+}
+
+.add{
+    color:#9A9DA0;
+}

@@ -129,3 +129,5 @@ MEDIA_URL = '/media/' # access image in the browser
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_REDIRECT_URL = 'songs'
+LOGIN_URL = 'login'

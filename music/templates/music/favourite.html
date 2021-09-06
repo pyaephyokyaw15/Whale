@@ -1,0 +1,8 @@
+{% extends 'music/base.html' %}
+
+{% block body %}
+    {% for song in user.song_set.all %}
+        {{ song }}
+       
+    {% endfor %}
+{% endblock %}

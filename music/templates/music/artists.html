@@ -1,0 +1,14 @@
+{% extends 'music/base.html' %}
+<img  class='small-logo' src="{{ artist.logo.url }}">
+<a href="{% url 'artist-songs' artist.id %}">{{artist.name}}</a>
+{% block body %}
+    <div class="d-flex flex-wrap align-content-center">
+        {% for artist in artists %}
+            <div class='text-center flex-item flex-fill'>
+                <img  class='large-logo' src="{{ artist.logo.url }}">
+                <p><a href="{% url 'artist-songs' artist.id %}">{{artist.name}}</a></p>
+            </div>
+        {% endfor %}    
+    </div>
+        
+{% endblock %}
