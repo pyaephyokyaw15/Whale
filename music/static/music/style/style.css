@@ -1,3 +1,8 @@
+.table{
+    margin-top: 50px;
+}
+
+
 .song, .artist {
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
@@ -26,12 +31,26 @@ nav-item{
     margin: 20px;
 }
 .large-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 100px;
+    margin-top: 100px; 
+}
+
+.song-play{
+    margin-top: 50px;
+    background-color:#9A9DA0;
+    top: 50px;
+    position: sticky;
+}
+.song-logo{
     width: 150px;
     height: 150px;
-    border-radius: 100px;
-    margin: 20px;
-  
+    border-radius: 50px;
+    margin: 20px; 
 }
+
+
 .navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .show>.nav-link{
     background-color: rgb(46, 165, 42);
 }
@@ -67,4 +86,73 @@ tr{
 
 .add{
     color:#9A9DA0;
+}
+
+.song-thumb{
+    margin-right: 20px;
+}
+
+.play{
+    cursor: pointer;
+}
+
+.max-duration{
+    margin-left: 300px;
+}
+
+.progress-area {
+    height: 6px;
+    width: 350px;
+    border-radius: 50px;
+    background: #f0f0f0;
+    cursor: pointer;
+    margin-top: 40px;
+}
+
+.progress-area .progress-bar {
+height: inherit;
+position: relative;
+border-radius: inherit;
+background-color: black;
+}
+
+
+.fa-star{
+    color:black;
+}
+
+.favourited{
+    color:#FFCD00;
+}
+
+.log-wraper{
+    width: 80px;
+    height:35px;
+    border:2px solid white;
+    border-radius: 20px;
+    background: #2EA52A;
+}
+
+.log{
+    color: #9A9DA0;
+}
+
+.log:hover{
+    color: white;
+    text-decoration: none;
+}
+
+.artist-name{
+    color: #2689ec;
+}
+
+.artist-name:hover{
+    color: rgb(0, 56, 177);
+    text-decoration: none;
+}
+
+
+.add:hover{
+    color: white;
+    text-decoration: none;
 }

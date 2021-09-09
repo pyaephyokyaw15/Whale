@@ -12,6 +12,7 @@ class Artist(models.Model):
 
 class Mood(models.Model):
     mood = models.CharField(max_length=250)
+    
 
     def __str__(self):
         return self.mood

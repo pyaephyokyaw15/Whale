@@ -1,8 +1,7 @@
 {% extends 'music/base.html' %}
-
 {%block navtab %}
     <li class="nav-item songs">
-        <a class="nav-link active" href="{% url 'songs' %}"><i class="fas fa-music"></i>&nbsp; Songs</a></i></span>  
+        <a class="nav-link" href="{% url 'songs' %}"><i class="fas fa-music"></i>&nbsp; Songs</a></i></span>  
     </li>
 
     <li class="nav-item artists">
@@ -15,33 +14,31 @@
     </li>
 
     <li class="nav-item favourites">
-            <a class="nav-link  align-items-center" href="{% url 'favourite' %}">
+            <a class="active nav-link  align-items-center" href="{% url 'favourite' %}">
             <i id="upper-icon" class="material-icons">queue_music</i>&nbsp; Favourites</a>
     </li>
 {% endblock %}
-
 {% block body %}
-    {% block song %}
-    {% endblock %}
-   
+
+
     <table class="table  table-hover ">
         <tbody>
-            {% for song in songs%}
+            {% for song in user.song_set.all %}
                     <tr>
                         <td class='align-middle text-center' style="width: 10%">
                             <img src="{{ song.logo.url }}" alt="logo" class="small-logo">
                         </td>
-                        <td class='align-middle' style="width: 70%"">
+                        <td class='align-middle' style="width: 70%">
                             <p class="song">{{ song.title }}</p>
                             <p class="artist">{{ song.artist }}</p>
                         </td>
     
                         <td class='align-middle' style="width: 5%"">
-                            <a  href="{% url 'song' song.id %}">
+                            <a  href="{% url 'favourite-songs-song'  song.id %}">
                                 <i class="far fa-play-circle fa-lg"></i>
                             </a>
                         </td>
-                        
+    
                         {% if song in user.song_set.all %}
                             <td class='align-middle' style="width: 10%">
                                 <a href="{% url 'edit'  song.id  %}"><i class="favourited fas fa-star"></i></a>
@@ -51,12 +48,13 @@
                                 <a href="{% url 'edit'  song.id %}"><i class="fas fa-star"></i></a>
                             </td>
                         {% endif %}
-                                
                     </tr>
                 
             {% endfor %}
         </tbody>
-    </table>    
+    </table> 
+
 {% endblock %}
+
 
 

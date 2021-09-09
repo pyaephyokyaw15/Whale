@@ -5,7 +5,8 @@ from .models import Song, Artist, Mood
 from django.views.generic import ListView, DetailView,CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404, render, get_list_or_404
 from django.contrib.auth.decorators import login_required
-
+from django.shortcuts import redirect
+from django.contrib.auth.models import User
 
 class SongListView(ListView):
   model = Song
@@ -22,17 +23,11 @@ class ArtistListView(ListView):
   context_object_name = 'artists' 
 
 
-class ArtistSongView(ListView):
+def artist_songs(request, artist_id):
+    return  render(request, 'music/artist_songs.html', {'artist': Artist.objects.get(pk=artist_id)})
 
-  template_name = 'music/artist_songs.html'  # <app>/<model>_<viewtype>.html
-  context_object_name = 'songs'
-
-  def get_queryset(self):
-    
-    artist = get_object_or_404(Artist, id=self.kwargs.get('artist_id'))
-    return Song.objects.filter(artist=artist) 
-
-
+def artist_songs_song(request, artist_id, song_id):
+    return  render(request, 'music/artist_songs_song.html', {'artist': Artist.objects.get(pk=artist_id), 'song': Song.objects.get(pk=song_id)})
 
 class MoodListView(ListView):
   model = Mood
@@ -41,21 +36,30 @@ class MoodListView(ListView):
 
 
 
+def mood_songs(request, mood_id):
+  return  render(request, 'music/mood_songs.html', {'mood': Mood.objects.get(pk=mood_id)})
 
-class MoodSongView(ListView):
+def mood_songs_song(request, mood_id, song_id):
+    return  render(request, 'music/mood_songs_song.html', {'mood': Mood.objects.get(pk=mood_id), 'song': Song.objects.get(pk=song_id)})
 
-  template_name = 'music/songs.html'  # <app>/<model>_<viewtype>.html
-  context_object_name = 'songs'
-
-  def get_queryset(self):
-    
-    mood = get_object_or_404(Mood, id=self.kwargs.get('mood_id'))
-    return Song.objects.filter(mood=mood) 
-
-
-
+def song(request, song_id):
+    return render(request, 'music/song.html', {'song': Song.objects.get(id=song_id), 'songs': Song.objects.all()})
   
   
 @login_required
 def favourite(request):
-  return render(request, 'music/favourite.html')
+  return render(request, 'music/favourite_songs.html')
+
+
+def favourite_songs_song(request, song_id):
+  return render(request, 'music/favourite_songs_song.html', {'song': Song.objects.get(pk=song_id)})
+
+def edit(request, song_id):
+  song = Song.objects.get(pk=song_id)
+
+  if song in request.user.song_set.all():
+    request.user.song_set.remove(song)
+  else:
+    request.user.song_set.add(song)
+
+  return redirect('favourite')

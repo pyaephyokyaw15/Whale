@@ -24,14 +24,14 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('music.urls')),
     path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
+    path('login/', user_views.user_login, name='login'),
     path('register/', user_views.register, name='register'), 
 
     # We can leave templave_name in logout. 
     # If so, it will logout and when we login again, it will take to admin login.
     # Not user login.
     # So, to get customize, we create logout.html.
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', user_views.user_logout, name='logout'),
 ]
 
 

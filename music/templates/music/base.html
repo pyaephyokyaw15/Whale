@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark" style="padding: 0px 16px">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top" style="padding: 0px 16px">
 
             <a class="navbar-brand" href="#"><img class='logo' src="/media/whale.png" alt="">Whale</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -22,35 +22,30 @@
 
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="nav navbar-nav nav-tabs" style="border-bottom:0px;">
-                    <li class="nav-item ">
-                    <a class="nav-link active" href="{% url 'songs' %}"><i class="fas fa-music"></i>&nbsp; Songs</a></i></span>
-                        
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="{% url 'artists' %}"><i class="fas fa-user-circle"></i>&nbsp; Artists</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="{% url 'moods' %}"><i class="fab fa-modx"></i>&nbsp; Moods</a>
-                    </li>
-                    <li class="nav-item" >
-                        <a class="nav-link align-items-center" href="{% url 'favourite' %}">
-                            <i id="upper-icon" class="material-icons">queue_music</i>&nbsp; Favourites</a>
-                    </li>
+                    {% block navtab %}
+                    {% endblock %}
                 </ul>
 
-                <form class="form-inline ml-auto" action="{% url 'songs' %}">
-                        <input type="text" class="form-control" name="q" placeholder='Search' value="{{ request.GET.q }}">            
+                <form  class="form-inline ml-auto" action="{% url 'songs' %}">
+                        <input style="width:30vw" type="text" class="form-control" name="q" placeholder='Search' value="{{ request.GET.q }}">            
                 </form>
 
                 <ul class="nav navbar-nav ml-auto">
-                    <li>
-                        <a class='add' href="#"><i class="fas fa-plus-circle"></i>&nbsp; Add</a>
-                        
+                    <li >
+                        <a class='add' href="#"><i class="fas fa-plus-circle"></i>&nbsp; Add &nbsp;&nbsp;</a> 
                     </li>
-                    <li>
-                        <a href="{% url 'logout' %}">
-                            &nbsp; Logout
-                        </a>
+                    <li >
+                        
+                            {% if  user.is_authenticated %}
+                            <a class='log ' href="{% url 'logout' %}">
+                                &nbsp; Logout
+                            </a>
+                            {% else %}
+                                <a class='log' href="{% url 'login' %}">
+                                    &nbsp; Login
+                                </a>
+                            {% endif %}
+                        
                     </li>
                 </ul>
             </div>  
@@ -58,6 +53,8 @@
 
         {% block body %}
         {% endblock %}
+        
+        <script src="{% static 'music/js/main.js' %}"></script>  
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

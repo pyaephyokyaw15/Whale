@@ -1,0 +1,79 @@
+{% extends 'music/songs.html' %}
+{%block navtab %}
+    <li class="nav-item songs">
+        <a class="nav-link active" href="{% url 'songs' %}"><i class="fas fa-music"></i>&nbsp; Songs</a></i></span>  
+    </li>
+
+    <li class="nav-item artists">
+        <a class="nav-link" href="{% url 'artists' %}"><i class="fas fa-user-circle"></i>&nbsp; Artists</a>
+    </li>
+
+
+    <li class="nav-item moods">
+        <a class="nav-link" href="{% url 'moods' %}"><i class="fab fa-modx"></i>&nbsp; Moods</a>
+    </li>
+
+    <li class="nav-item favourites">
+            <a class="nav-link  align-items-center" href="{% url 'favourite' %}">
+            <i id="upper-icon" class="material-icons">queue_music</i>&nbsp; Favourites</a>
+    </li>
+{% endblock %}
+{% block song %}
+    <div class="container-fluid song-play">
+
+        <div class='row h-100 justify-content-center'>
+            <div class="song-thumb col-xs-6 my-auto">
+                <img class='song-logo' src="{{ song.logo.url }}" alt="">
+            </div>
+
+            <div class="song-thumb pad col-xs-6 my-auto">
+                <p>{{ song.title }}</p>
+                <p>{{ song.artist }}</p>
+            </div>
+            
+            <audio id="main-audio" src="{{ song.audio.url }}"></audio>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class='progress-area'>
+                <div class="progress-bar">
+                    <audio id="main-audio" src="{{ song.audio.url }}"></audio>
+                </div>
+            </div>
+            
+        </div>
+
+        
+        <div class="row song-timer justify-content-center">
+            <div class="col-xs-6">
+                <p class="current-time">0:00</p>
+            </div>
+            
+            <div class="col-xs-6">
+                <p class="max-duration">0:00</p>
+            </div>
+        </div>
+        
+
+        <div class='row h-100 justify-content-center'>
+            <i id="repeat-plist" class="material-icons" title="Playlist looped">repeat</i>
+            <i id="prev" class="material-icons">skip_previous</i>
+            <div class="col-xs-12 my-auto play-pause">
+                <i class="material-icons play ">play_arrow</i>  
+            </div>
+            <i id="next" class="material-icons">skip_next</i>
+            <i id="more-music" class="material-icons">queue_music</i>
+        </div>
+
+    </div>
+
+    <script>
+
+        mainAudio = document.querySelector("#main-audio");
+        mainAudio.addEventListener("ended", ()=>{
+            console.log('End');
+        });
+        
+    </script>
+
+{% endblock %}
