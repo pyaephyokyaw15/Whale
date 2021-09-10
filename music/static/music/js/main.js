@@ -2,14 +2,6 @@ mainAudio = document.querySelector("#main-audio");
 playPauseBtn = document.querySelector(".play-pause");
 progressArea = document.querySelector(".progress-area");
 progressBar = document.querySelector(".progress-bar");
-songs = document.querySelector(".songs");
-artists = document.querySelector(".artists");
-moods = document.querySelector(".moods");
-favourites = document.querySelector(".favourites");
-console.log(songs);
-console.log(artists);
-console.log(moods);
-console.log(favourites);
 
 
 function playMusic(){
@@ -89,36 +81,3 @@ progressArea.addEventListener("click", (e)=>{
 
 
 
-
-songs.addEventListener("click", ()=>{
-  console.log('Songs');
-  favourites.classList.add("active");
-  
-});
-
-
-
-artists.addEventListener("click", ()=>{
-  console.log('Artists');
-  favourites.classList.add("active");
-  
-});
-
-
-moods.addEventListener("click", ()=>{
-  console.log('Moods');
-  favourites.classList.add("active");
-  
-});
-
-favourites.addEventListener("click", ()=>{
-  console.log('Favourites');
-  artists.classList.add("active");
-});
-
-
-$(document).ready(function() {
-  $(document).on('click', '.nav-item a', function (e) {
-      $(this).parent().addClass('active').siblings().removeClass('active');
-  });
-});

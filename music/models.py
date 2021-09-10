@@ -12,6 +12,8 @@ class Artist(models.Model):
 
 class Mood(models.Model):
     mood = models.CharField(max_length=250)
+    logo = models.FileField(default='whale.png')
+   
     
 
     def __str__(self):
@@ -35,5 +37,14 @@ class Playlist(models.Model):
     
     def __str__(self):
         return self.title
+
+
+class Note(models.Model):
+    note = models.TextField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.note
 
 

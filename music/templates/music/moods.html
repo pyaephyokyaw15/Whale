@@ -26,7 +26,7 @@
     <div class="d-flex flex-wrap align-content-center">
         {% for mood in moods %}
             <div class='text-center flex-item flex-fill'>
-                <img  class='large-logo' src="">
+                <img  class='large-logo' src="{{ mood.logo.url }}">
                 <p><a class='artist-name' href="{% url 'mood-songs' mood.id %}">{{mood.mood}}</a></p>
             </div>
         {% endfor %}    

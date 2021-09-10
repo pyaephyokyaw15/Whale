@@ -63,3 +63,12 @@ def edit(request, song_id):
     request.user.song_set.add(song)
 
   return redirect('favourite')
+
+def mood_route(request, mood_id, song_id):
+  mood = Mood.objects.get(id=mood_id)
+
+  
+  next_song = mood.song_set.filter(id__gt=song_id).first()
+  if not next_song:
+    next_song =  mood.song_set.all().first()
+  return redirect('http://127.0.0.1:8000/moods/{}/{}'.format(mood_id, next_song.id))

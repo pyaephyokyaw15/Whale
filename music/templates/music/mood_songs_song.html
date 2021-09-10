@@ -102,12 +102,11 @@
 </table> 
 
 <script>
-
     
     mainAudio = document.querySelector("#main-audio");
     mainAudio.addEventListener("ended", ()=>{
         console.log('End');
-        window.open('http://127.0.0.1:8000/moods/{{mood.id}}',"_self")
+        window.open('http://127.0.0.1:8000/moods/route/{{mood.id}}/{{song.id}}',"_self")
     });
 
     
