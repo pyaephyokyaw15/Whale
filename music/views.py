@@ -64,7 +64,7 @@ def edit(request, song_id):
 
   return redirect('favourite')
 
-def mood_route(request, mood_id, song_id):
+def mood_next(request, mood_id, song_id):
   mood = Mood.objects.get(id=mood_id)
 
   
@@ -72,3 +72,72 @@ def mood_route(request, mood_id, song_id):
   if not next_song:
     next_song =  mood.song_set.all().first()
   return redirect('http://127.0.0.1:8000/moods/{}/{}'.format(mood_id, next_song.id))
+
+
+def mood_prev(request, mood_id, song_id):
+  mood = Mood.objects.get(id=mood_id)
+
+  
+  prev_song = mood.song_set.filter(id__lt=song_id).last()
+  if not prev_song:
+    prev_song =  mood.song_set.all().last()
+  return redirect('http://127.0.0.1:8000/moods/{}/{}'.format(mood_id, prev_song.id))
+
+def artist_next(request, artist_id, song_id):
+  artist= Artist.objects.get(id=artist_id)
+
+  
+  next_song = artist.song_set.filter(id__gt=song_id).first()
+  if not next_song:
+    next_song =  artist.song_set.all().first()
+  return redirect('http://127.0.0.1:8000/artists/{}/{}'.format(artist_id, next_song.id))
+
+
+def artist_prev(request, artist_id, song_id):
+  artist = Artist.objects.get(id=artist_id)
+
+  
+  prev_song = artist.song_set.filter(id__lt=song_id).last()
+  if not prev_song:
+    prev_song =  artist.song_set.all().last()
+  return redirect('http://127.0.0.1:8000/artists/{}/{}'.format(artist_id, prev_song.id))
+
+
+
+
+def favourite_next(request, song_id):
+  
+
+  next_song = request.user.song_set.filter(id__gt=song_id).first()
+  if not next_song:
+    next_song =  request.user.song_set.all().first()
+  return redirect('http://127.0.0.1:8000/favourite/{}'.format(next_song.id))
+
+
+def favourtie_prev(request,song_id):
+  
+  prev_song = request.user.song_set.filter(id__lt=song_id).last()
+  if not prev_song:
+    prev_song =  request.user.song_set.all().last()
+  return redirect('http://127.0.0.1:8000/favourite/{}'.format(prev_song.id))
+
+
+
+
+def song_next(request, song_id):
+  
+
+  next_song = Song.objects.filter(id__gt=song_id).first()
+  if not next_song:
+    next_song =  Song.objeccts.all().first()
+  return redirect('http://127.0.0.1:8000/songs/{}'.format(next_song.id))
+
+
+def song_prev(request,song_id):
+  
+  prev_song = Song.objects.filter(id__lt=song_id).last()
+  if not prev_song:
+    prev_song =  Song.objects.all().last()
+  return redirect('http://127.0.0.1:8000/songs/{}'.format(prev_song.id))
+
+

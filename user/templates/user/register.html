@@ -1,13 +1,100 @@
-<html>
-    <head>
-        <title>Register</title>
-        
-    </head>
-    <body>
-        <form method="POST">{% csrf_token %}
-        <!-- form variable -->    
-        {{ form.as_p }} 
-        <input type="submit" name="register">
-        </form>
-    </body>
+
+
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Whale Streaming{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'music/style/style.css' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="icon" href="/media/whale.png"  type="image/x-icon">
+</head>
+<body>
+
+    <div class="main-wraper">
+
+       
+            <div>
+                <img  id='large-logo-register' src="/media/whale.png">    
+            </div>
+           
+            
+            <form class="form-horizontal" role="form" action="{% url 'register'%}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">
+                        Username:
+                    </label>
+                    <div class="input-wraper">
+                        {{form.username}}
+                    </div>
+   
+                    
+                </div>
+                
+
+                <div class="form-group">
+                    <label for="id_password">
+                        Email:
+                    </label>
+                    <div class="input-wraper">
+                        {{form.email}}
+                    </div>
+                </div>
+               
+
+                <div class="form-group">
+                    <label for="id_password">
+                        Password:
+                    </label>
+                    <div class="input-wraper">
+                        {{form.password1}}
+                    </div>
+                </div>
+                
+
+                
+                <div class="form-group">
+                    <label for="id_password">
+                        Confirm Password:
+                    </label>
+                    <div class="input-wraper">
+                        {{form.password2}}
+                    </div>
+                </div>
+               
+
+
+                <div class="form-group">
+                    <div class='text-center'>
+                        <button type="submit" class="btn btn-success">Register</button>
+                    </div>
+                </div>
+            </form>
+                       
+            
+            <div class="panel-footer">
+                Already have an account? <a href="{% url 'login' %}">Click here</a> to login.
+            </div>  
+            
+    </div>
+           
+    
+    
+    
+    <script src="{% static 'music/js/main.js' %}"></script>  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
+

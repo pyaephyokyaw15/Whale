@@ -20,6 +20,7 @@
 {% endblock %}
 {% block body %}
 
+
 <div class="container-fluid song-play">
 
     <div class='row h-100 justify-content-center'>
@@ -57,15 +58,27 @@
     
 
     <div class='row h-100 justify-content-center'>
-        <i id="repeat-plist" class="material-icons" title="Playlist looped">repeat</i>
-        <i id="prev" class="material-icons">skip_previous</i>
+        <i onclick="previous()" id="prev" class="material-icons">skip_previous</i>
         <div class="col-xs-12 my-auto play-pause">
             <i class="material-icons play ">play_arrow</i>  
         </div>
-        <i id="next" class="material-icons">skip_next</i>
-        <i id="more-music" class="material-icons">queue_music</i>
+        <i onclick="next()" id="next" class="material-icons">skip_next</i>  
+        <i id='sticky-note' onclick='note()'class="fas fa-sticky-note"></i>
     </div>
 
+</div>
+
+<div class="container-fluid note">
+    <br>
+    <div class='row  justify-content-center'>
+            <textarea id="note-text" name="note" rows="6" cols="40"></textarea>   
+    </div>
+
+    
+    <div class='row  justify-content-center'>
+        <button onclick='song()' type="submit" class="btn btn-success">Note</button>
+    </div>
+    
 </div>
 
 <table class="table  table-hover ">
@@ -80,7 +93,7 @@
                         <p class="artist">{{ song.artist }}</p>
                     </td>
 
-                    <td class='align-middle' style="width: 5%"">
+                    <td class='align-middle' style="width: 5%">
                         <a  href="{% url 'mood-songs-song' mood.id song.id %}">
                             <i class="far fa-play-circle fa-lg"></i>
                         </a>
@@ -106,10 +119,30 @@
     mainAudio = document.querySelector("#main-audio");
     mainAudio.addEventListener("ended", ()=>{
         console.log('End');
-        window.open('http://127.0.0.1:8000/moods/route/{{mood.id}}/{{song.id}}',"_self")
+        window.open('http://127.0.0.1:8000/moods/next/{{mood.id}}/{{song.id}}',"_self")
+    
     });
 
     
+    function next(){
+        console.log('Next');
+        window.open('http://127.0.0.1:8000/moods/next/{{mood.id}}/{{song.id}}',"_self")
+    }
+
+    function previous(){
+        console.log('Previous');
+        window.open('http://127.0.0.1:8000/moods/prev/{{mood.id}}/{{song.id}}',"_self")
+    }
+
+    function note(){
+        sticky_note = document.querySelector('.note');
+        sticky_note.style.visibility = 'visible';
+    }
+
+    function song(){
+        sticky_note = document.querySelector('.note');
+        sticky_note.style.visibility= 'hidden';
+    }
     
 </script>
 

@@ -21,11 +21,11 @@
 {% endblock %}
 
 {% block body %}
-    <div class="d-flex flex-wrap align-content-center">
+    <div  class="d-flex flex-wrap align-content-center">
         {% for artist in artists %}
             <div class='text-center flex-item flex-fill'>
                 <img  class='large-logo' src="{{ artist.logo.url }}">
-                <p><a class='artist-name' href="{% url 'artist-songs' artist.id %}">{{artist.name}}</a></p>
+                <p class='artist-name'><a class='artist-name' href="{% url 'artist-songs' artist.id %}">{{artist.name}}</a></p>
             </div>
         {% endfor %}    
     </div>
