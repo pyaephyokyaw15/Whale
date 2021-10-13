@@ -25,7 +25,7 @@ https://mgchat2.pythonanywhere.com/
  - Add songs by users
  - Save note
  - Create user profile
-
+ - Search songs
 
   
 ## Authors
