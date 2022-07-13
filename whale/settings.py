@@ -42,9 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # third-party apps
-    # 'audiofield',
-
     # my apps
     'songs.apps.SongsConfig',
 
@@ -59,9 +56,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # third-party
-    # 'audiofield.middleware.threadlocals.ThreadLocals'
 ]
 
 ROOT_URLCONF = 'whale.urls'
@@ -140,3 +134,5 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
