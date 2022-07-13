@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for song in songs %}
+        <p>{{ song.title }}</p>
+        <img src="{{ song.banner.url }}" alt="banner">
+
+    {% endfor %}
+</body>
+</html>
