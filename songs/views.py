@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Song, Genre, Mood
+from django.urls import reverse
+
 
 
 # Create your views here.
@@ -55,5 +57,15 @@ class MoodSongListView(ListView):
         return Song.objects.filter(mood=mood)
 
 
+
+
+class SongUploadView(CreateView):
+    model = Song
+    template_name = 'songs/upload.html'
+    fields = ['title', 'banner', 'audio_file', 'mood', 'genre']
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 

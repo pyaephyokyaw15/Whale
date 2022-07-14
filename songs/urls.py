@@ -10,4 +10,5 @@ urlpatterns = [
     path('genres/<slug:slug>/', views.GenreSongListView.as_view(), name='genre_songs'),
     path('moods/', views.MoodListView.as_view(), name='moods'),
     path('moods/<slug:slug>/', views.MoodSongListView.as_view(), name='mood_songs'),
+    path('upload/', views.SongUploadView.as_view(), name='upload'),
 ]

@@ -1,0 +1,65 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg p-0 navbar-dark sticky-top" style="background-color: #1c7ac7">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img class='logo' src="{% static 'images/whale.png' %}"  alt="">Whale</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="moods" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Moods
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Happy</a>
+                        <a class="dropdown-item" href="#">Sad</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="genres" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Genres
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Pop</a>
+                        <a class="dropdown-item" href="#">Rock</a>
+                    </div>
+                </li>
+            </ul>
+
+
+
+            <ul class="navbar-nav mb-2 m-lg-0">
+                <form role="search">
+                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                </form>
+            </ul>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Upload</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav mb-2 mb-lg-0 mx-lg-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img id="profile-thumbnail" src="/images/default_user.png"  alt="image">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <hr class="dropdown-divider">
+                        <a class="dropdown-item" href="#">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

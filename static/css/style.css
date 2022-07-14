@@ -1,0 +1,29 @@
+#profile-thumbnail {
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+}
+
+.logo{
+    width: 80px;
+    height: 45px;
+    background-color: inherit;
+    padding: 0px;
+    margin: 0px;
+}
+
+.favourite{
+    color: red;
+
+}
+
+.unfavourite{
+    color: black;
+}
+
+
+.song-thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+}
