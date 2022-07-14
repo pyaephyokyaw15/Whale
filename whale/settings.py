@@ -44,7 +44,10 @@ INSTALLED_APPS = [
 
     # my apps
     'songs.apps.SongsConfig',
-    'accounts.apps.AccountsConfig'
+    'accounts.apps.AccountsConfig',
+
+    # third-party
+    'crispy_forms',
 
 ]
 
@@ -126,6 +129,10 @@ AUTH_USER_MODEL = "accounts.User"
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
 
 # Media fiels
 MEDIA_ROOT = BASE_DIR /'media'
@@ -137,3 +144,8 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# DEFAULT_FILE_STORAGE = os.getenv("DEFAULT_FILE_STORAGE")
+# AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+# AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+# AWS_QUERYSTRING_AUTH = os.getenv("AWS_QUERYSTRING_AUTH")

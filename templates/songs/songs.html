@@ -1,14 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% for song in songs %}
-        <p>{{ song.title }}</p>
-        <img src="{{ song.banner.url }}" alt="banner">
+{% extends 'layout.html' %}
 
-    {% endfor %}
-</body>
-</html>
+{% block main %}
+    <table class="table  table-hover ">
+        <tbody>
+            {% for song in songs%}
+                    <tr>
+                        <td class='align-middle text-center' style="width: 10%">
+                            <img src="{{ song.banner.url }}" alt="logo" class="song-thumbnail">
+                        </td>
+                        <td class='align-middle' style="width: 70%">
+                            <p class="song">{{ song.title }}</p>
+                            <p class="artist">{{ song.owner }}</p>
+                        </td>
+
+                        <td class='align-middle' style="width: 5%">
+                            <i class="far fa-play-circle fa-lg"></i>
+                        </td>
+
+                        {% if song in user.favourite_songs.all %}
+                            <td class='align-middle' style="width: 10%">
+                                <a href="{% url 'edit'  song.id  %}"><i class="favourite far fa-heart"></i></a>
+                            </td>
+                        {% else %}
+                            <td class='align-middle' style="width: 10%">
+                                <a href="#"><i class="unfavourite far fa-heart"></i></a>
+                            </td>
+                        {% endif %}
+
+                    </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

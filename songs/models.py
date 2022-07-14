@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 User = settings.AUTH_USER_MODEL
 
@@ -24,6 +25,7 @@ class Genre(models.Model):
 
 
 class Song(models.Model):
+    owner = models.ForeignKey(User, related_name="songs", on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     banner = models.ImageField(default='images/song_banners/default.png', upload_to='images/song_banners/')
     audio_file = models.FileField(upload_to='songs/')
@@ -33,6 +35,19 @@ class Song(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('songs:all_songs')
+
+
+class Comment(models.Model):
+    text = models.TextField()
+    owner = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
+    song = models.ForeignKey(Song, related_name="comments", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.song}:{self.owner}'
+
 
 
 
