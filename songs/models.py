@@ -32,6 +32,18 @@ class Song(models.Model):
     mood = models.ManyToManyField(Mood, blank=True, related_name="songs")
     genre = models.ManyToManyField(Genre, blank=True, related_name="songs")
     favourite_by = models.ManyToManyField(User, related_name="favourite_songs", blank=True)
+    upload_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-upload_time']
+
+    @property
+    def favourite_count(self):
+        return self.favourite_by.count()
+
+    @property
+    def comment_count(self):
+        return self.comments.count()
 
     def __str__(self):
         return self.title
