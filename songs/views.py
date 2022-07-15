@@ -69,3 +69,20 @@ class SongUploadView(CreateView):
         return super().form_valid(form)
 
 
+def song_detail(request, pk):
+    song = Song.objects.filter(pk=pk).first()
+
+    next_song = Song.objects.filter(pk__lt=pk).first()
+    if not next_song:
+        next_song = Song.objects.all().first()
+
+    previous_song = Song.objects.filter(pk__gt=pk).last()
+    if not previous_song:
+        previous_song = Song.objects.all().last()
+
+    context = {
+        "song": song,
+        "next_song": next_song,
+        "previous_song": previous_song
+    }
+    return render(request, 'songs/song_detail.html', context=context)

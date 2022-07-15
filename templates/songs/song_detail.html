@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <div class="container-lg">
+        <div class="row align-items-center justify-content-center my-4">
+
+            <div class="col col-md-3 d-flex justify-content-center">
+                <img id="profile-large" src="{{ song.banner.url }}" alt="image">
+            </div>
+
+            <div class="col col-md-4 d-flex justify-content-center">
+                <div class="row">
+                    <div class="col">
+                        <h5>{{ song.title }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>{{ song.owner }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row align-items-center justify-content-center my-3">
+            <div class="col col-md-5 d-flex justify-content-center">
+                <div class="song-progress-area">
+                    <div class="song-progress-bar">
+                        <audio id="main-audio" src="{{ song.audio_file.url }}"></audio>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center justify-content-center my-3">
+
+            <div class="col col-md-5 d-flex justify-content-center">
+                <div class="song-timer d-flex justify-content-between">
+                    <span class="current-time">0:00</span>
+                    <span class="max-duration">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center justify-content-center my-3">
+            <div class="col col-md-5 d-flex justify-content-between">
+                <i onclick='previous()' id="prev" class="material-icons">skip_previous</i>
+                <div class="my-auto play-pause">
+                    <i id="play-pause" class="material-icons play">play_arrow</i>
+                </div>
+                <i onclick='next()' id="next" class="material-icons">skip_next</i>
+                <i id='sticky-note' onclick='note()'class="fas fa-sticky-note"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mainAudio = document.querySelector("#main-audio");
+        mainAudio.addEventListener("ended", ()=>{
+            console.log('End');
+            next();
+        });
+
+        function next(){
+            console.log('Next');
+            console.log({{ next_song.id }})
+            window.open('http://127.0.0.1:5001/songs/{{ next_song.id }}',"_self")
+        }
+         function previous(){
+            console.log('Previous');
+            window.open('http://127.0.0.1:5001/songs/{{ previous_song.id }}',"_self")
+        }
+
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <div class="container-lg">
+        <div class="row align-items-center my-3">
+            <div class="col col-md-3">
+                <img id="profile-large" src="{{ user.profile_picture.url }}" alt="image">
+            </div>
+            <div class="col col-md-4">
+                <div class="row">
+                    <div class="col">
+                        <h5>Pyae Phyo Kyaw</h5>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <p>{{ user.username }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <p>Followers: 12</p>
+                    </div>
+                    <div class="col">
+                         <p>Following: 40</p>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <button>Follow</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <ul class="nav nav-tabs my-4">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">Uploaded</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Favourite</a>
+            </li>
+
+        </ul>
+
+        <table class="table  table-hover ">
+            <tbody>
+                {% for song in songs%}
+                    <tr>
+                        <td class='align-middle text-center'>
+                            <img src="{{ song.banner.url }}" alt="logo" class="song-thumbnail">
+                        </td>
+                        <td class='align-middle'>
+                            <p class="song">{{ song.title }}</p>
+                            <p class="artist">{{ song.owner }}</p>
+                        </td>
+
+                        <td class='align-middle'>
+                            <i class="far fa-play-circle fa-lg"></i>
+                        </td>
+
+                        {% if song in user.favourite_songs.all %}
+                            <td class='align-middle' style="width: 10%">
+                                <a href="{% url 'edit'  song.id  %}"><i class="favourite far fa-heart"></i></a>
+                            </td>
+                        {% else %}
+                            <td class='align-middle' style="width: 10%">
+                                <a href="#"><i class="unfavourite far fa-heart"></i></a>
+                            </td>
+                        {% endif %}
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+{% endblock %}

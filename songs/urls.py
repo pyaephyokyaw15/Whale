@@ -5,6 +5,7 @@ app_name = 'songs'
 
 urlpatterns = [
     path('', views.SongListView.as_view(), name='all_songs'),
+    path('<int:pk>/', views.song_detail, name='song_detail'),
     path('favourites/', views.FavouriteSongListView.as_view(), name='favourite_songs'),
     path('genres/', views.GenreListView.as_view(), name='genres'),
     path('genres/<slug:slug>/', views.GenreSongListView.as_view(), name='genre_songs'),
