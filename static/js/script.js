@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
     // play music function
     function playMusic() {
         playPauseBtn.classList.add("paused");
@@ -26,8 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
     playPauseBtn.addEventListener("click", ()=>{
 
         const isMusicPlay = playPauseBtn.classList.contains("paused");
+        console.log(isMusicPlay);
+
         //if isPlayMusic is true then call pauseMusic else call playMusic
         isMusicPlay ? pauseMusic() : playMusic();
+
 
     });
 

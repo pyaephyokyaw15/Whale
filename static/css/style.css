@@ -1,7 +1,8 @@
-#profile-thumbnail {
+.profile-thumbnail {
     width: 30px;
     height: 30px;
     border-radius: 15px;
+    background-color: inherit;
 }
 
 #prev,
@@ -38,6 +39,7 @@
     color: red;
 
 }
+
 
 .unfavourite{
     color: black;

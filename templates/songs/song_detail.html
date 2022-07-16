@@ -1,22 +1,24 @@
 {% extends 'layout.html' %}
+{% load crispy_forms_tags %}
 
 {% block main %}
     <div class="container-lg">
         <div class="row align-items-center justify-content-center my-4">
 
+
             <div class="col col-md-3 d-flex justify-content-center">
                 <img id="profile-large" src="{{ song.banner.url }}" alt="image">
             </div>
 
-            <div class="col col-md-4 d-flex justify-content-center">
+            <div class="col col-md-4">
                 <div class="row">
-                    <div class="col">
+                    <div class="col d-flex justify-content-center">
                         <h5>{{ song.title }}</h5>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
-                        <p>{{ song.owner }}</p>
+                    <div class="col d-flex justify-content-center">
+                        <a href="{% url 'accounts:profile'  song.owner.username  %}">{{ song.owner }}</a>
                     </div>
                 </div>
             </div>
@@ -27,7 +29,7 @@
             <div class="col col-md-5 d-flex justify-content-center">
                 <div class="song-progress-area">
                     <div class="song-progress-bar">
-                        <audio id="main-audio" src="{{ song.audio_file.url }}"></audio>
+                        <audio id="main-audio" src="{{ song.audio_file.url }}" autoplay></audio>
                     </div>
                 </div>
             </div>
@@ -46,13 +48,62 @@
         <div class="row align-items-center justify-content-center my-3">
             <div class="col col-md-5 d-flex justify-content-between">
                 <i onclick='previous()' id="prev" class="material-icons">skip_previous</i>
-                <div class="my-auto play-pause">
-                    <i id="play-pause" class="material-icons play">play_arrow</i>
+                <div class="my-auto play-pause paused">
+                    <i id="play-pause" class="material-icons" >pause</i>
                 </div>
                 <i onclick='next()' id="next" class="material-icons">skip_next</i>
                 <i id='sticky-note' onclick='note()'class="fas fa-sticky-note"></i>
             </div>
         </div>
+
+        <h5>Comments</h5>
+
+        {% if user.is_authenticated %}
+            <h6>Post your comment:</h6>
+            <div class="row">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="input-field col s8">
+                        {{ comment_form|crispy }}
+                    </div>
+                    <div class="input-field col s4">
+                        <button type="submit" name="comment">Submit comment</button>
+                    </div>
+                </form>
+            </div>
+
+        {% else %}
+            <p>Please <a href="{% url 'accounts:login' %}">login</a> to comment.</p>
+        {% endif %}
+
+        <div class="row align-items-center my-3">
+            <div class="col col-12 col-md-6">
+                 {% for comment in comments %}
+                      <div class="comment-box">
+                          <span class="comment-author">{{ comment.owner }}</span>
+                          <span class="comment-date">{{ comment.created_on }}</span>
+                          <p>{{ comment.text }}</p>
+                      </div>
+                {% empty %}
+                      No comments yet!
+                {% endfor %}
+            </div>
+
+            <div class="col col-12 col-md-6">
+                 {% for comment in comments %}
+                      <div class="comment-box">
+                          <span class="comment-author">{{ comment.owner }}</span>
+                          <span class="comment-date">{{ comment.created_on }}</span>
+                          <p>{{ comment.text }}</p>
+                      </div>
+                {% empty %}
+                      No comments yet!
+                {% endfor %}
+            </div>
+
+
+        </div>
+
     </div>
 
     <script>

@@ -9,18 +9,22 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav  me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="{% url 'songs:all_songs' %}">All Songs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'songs:favourite_songs' %}">Favourites</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="moods" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Moods
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Happy</a>
-                        <a class="dropdown-item" href="#">Sad</a>
+                        {% for mood in moods %}
+                            <a class="dropdown-item" href="{% url 'songs:mood_songs' mood.slug %}">{{ mood }}</a>
+                        {% endfor %}
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -28,8 +32,9 @@
                         Genres
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Pop</a>
-                        <a class="dropdown-item" href="#">Rock</a>
+                        {% for genre in genres %}
+                            <a class="dropdown-item" href="{% url 'songs:genre_songs' genre.slug %}">{{ genre }}</a>
+                        {% endfor %}
                     </div>
                 </li>
             </ul>
@@ -37,27 +42,36 @@
 
 
             <ul class="navbar-nav mb-2 m-lg-0">
-                <form role="search">
-                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                <form action="{% url 'songs:search' %}" role="search">
+                    <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="q">
                 </form>
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Upload</a>
+                    <a class="nav-link" href="{% url 'songs:upload' %}">Upload</a>
                 </li>
             </ul>
 
             <ul class="navbar-nav mb-2 mb-lg-0 mx-lg-3">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img id="profile-thumbnail" src="/images/default_user.png"  alt="image">
+                        {% if user.is_authenticated %}
+                            <img class="profile-thumbnail" src="{{ user.profile_picture.url }}"  alt="image">
+                        {% else %}
+                            <img class="profile-thumbnail" src="{% static 'images/user.png' %}"  alt="image">
+                        {% endif %}
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="#">Setting</a>
-                        <hr class="dropdown-divider">
-                        <a class="dropdown-item" href="#">Logout</a>
+                        {% if user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url 'accounts:profile' user.username %}">Profile</a>
+                            <a class="dropdown-item" href="#">Setting</a>
+                            <hr class="dropdown-divider">
+                            <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                        {% else %}
+                            <a class="dropdown-item" href="{% url 'accounts:register' %}">Register</a>
+                            <a class="dropdown-item" href="{% url 'accounts:login' %}">Login</a>
+                        {% endif %}
                     </div>
                 </li>
             </ul>

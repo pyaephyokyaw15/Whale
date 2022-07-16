@@ -8,7 +8,7 @@ User = settings.AUTH_USER_MODEL
 # Create your models here.
 class Mood(models.Model):
     name = models.CharField(max_length=50)
-    banner = models.ImageField(default='images/mood_banners/default.png', upload_to='images/mood_banners/')
+    # banner = models.ImageField(default='images/mood_banners/default.png', upload_to='images/mood_banners/')
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -17,7 +17,7 @@ class Mood(models.Model):
 
 class Genre(models.Model):
     name = models.CharField(max_length=50)
-    banner = models.ImageField(default='images/genre_banners/default.png', upload_to='images/genre_banners/')
+    # banner = models.ImageField(default='images/genre_banners/default.png', upload_to='images/genre_banners/')
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -56,6 +56,7 @@ class Comment(models.Model):
     text = models.TextField()
     owner = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
     song = models.ForeignKey(Song, related_name="comments", on_delete=models.CASCADE)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.song}:{self.owner}'

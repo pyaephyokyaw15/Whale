@@ -8,24 +8,28 @@
                         <td class='align-middle text-center' style="width: 10%">
                             <img src="{{ song.banner.url }}" alt="logo" class="song-thumbnail">
                         </td>
+
                         <td class='align-middle' style="width: 70%">
                             <p class="song">{{ song.title }}</p>
-                            <p class="artist">{{ song.owner }}</p>
+                            <a href="{% url 'accounts:profile'  song.owner.username  %}">{{ song.owner }}</a>
                         </td>
 
                         <td class='align-middle' style="width: 5%">
-                            <i class="far fa-play-circle fa-lg"></i>
+                            <a href="{% url 'songs:song_detail'  song.id  %}"><i class="far fa-play-circle fa-lg"></i></a>
                         </td>
 
+
+
                         {% if song in user.favourite_songs.all %}
-                            <td class='align-middle' style="width: 10%">
-                                <a href="{% url 'edit'  song.id  %}"><i class="favourite far fa-heart"></i></a>
-                            </td>
+                           <td class='align-middle' style="width: 10%">
+                               <a href="{% url 'songs:song_like'  song.pk %}"><i class="favourite far fa-heart"></i></a>
+                           </td>
                         {% else %}
-                            <td class='align-middle' style="width: 10%">
-                                <a href="#"><i class="unfavourite far fa-heart"></i></a>
-                            </td>
+                           <td class='align-middle' style="width: 10%">
+                               <a href="{% url 'songs:song_like'  song.pk %}"><i class="far fa-heart"></i></a>
+                          </td>
                         {% endif %}
+
 
                     </tr>
 
