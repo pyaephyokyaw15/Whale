@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Song, Genre, Mood
+from .models import Song, Genre, Mood, Comment
 from django.urls import reverse
-
+from django.db.models import Q
+from .forms import CommentForm
 
 
 # Create your views here.
@@ -11,6 +12,20 @@ class SongListView(ListView):
     model = Song
     template_name = 'songs/songs.html'
     context_object_name = 'songs'
+
+
+class SongSearchView(ListView):
+    model = Song
+    template_name = 'songs/songs.html'
+    context_object_name = 'songs'
+
+    def get_queryset(self):
+        q = self.request.GET.get('q')
+        if q:
+            songs = Song.objects.filter(Q(title__icontains=q) | Q(owner__username__icontains=q))
+        else:
+            songs = Song.objects.all()
+        return songs
 
 
 class FavouriteSongListView(LoginRequiredMixin, ListView):
@@ -71,18 +86,43 @@ class SongUploadView(CreateView):
 
 def song_detail(request, pk):
     song = Song.objects.filter(pk=pk).first()
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            temp = comment_form.save(commit=False)
+            temp.owner = request.user
+            temp.song = song
+            temp.save()
 
-    next_song = Song.objects.filter(pk__lt=pk).first()
-    if not next_song:
-        next_song = Song.objects.all().first()
+        return redirect('songs:song_detail',pk=pk)
 
-    previous_song = Song.objects.filter(pk__gt=pk).last()
-    if not previous_song:
-        previous_song = Song.objects.all().last()
+    if request.method == "GET":
+        next_song = Song.objects.filter(pk__lt=pk).first()
+        if not next_song:
+            next_song = Song.objects.all().first()
 
-    context = {
-        "song": song,
-        "next_song": next_song,
-        "previous_song": previous_song
-    }
-    return render(request, 'songs/song_detail.html', context=context)
+        previous_song = Song.objects.filter(pk__gt=pk).last()
+        if not previous_song:
+            previous_song = Song.objects.all().last()
+        comments = Comment.objects.filter(song=song)
+        comment_form = CommentForm()
+
+        context = {
+            "song": song,
+            "next_song": next_song,
+            "previous_song": previous_song,
+            "comments": comments,
+            "comment_form": comment_form
+        }
+        return render(request, 'songs/song_detail.html', context=context)
+
+
+
+def song_like(request, pk):
+    song = Song.objects.get(pk=pk)
+    if request.user in song.favourite_by.all():
+        song.favourite_by.remove(request.user)
+    else:
+        song.favourite_by.add(request.user)
+
+    return redirect('songs:all_songs')
