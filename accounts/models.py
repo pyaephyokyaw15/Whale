@@ -8,9 +8,11 @@ class User(AbstractUser):
     authentic = models.BooleanField(default=False)
     followers = models.ManyToManyField('self', blank=True, symmetrical=False)
 
+    def __str__(self):
+        return self.username
+
     @property
     def following(self):
         return User.objects.filter(followers=self)
 
-    def __str__(self):
-        return self.username
+
