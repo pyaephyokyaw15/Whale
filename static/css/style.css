@@ -5,6 +5,11 @@
     background-color: inherit;
 }
 
+i.fa-heart {
+    cursor: pointer;
+}
+
+
 #prev,
 #play-pause,
 #next

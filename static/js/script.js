@@ -1,10 +1,8 @@
-document.addEventListener('DOMContentLoaded', function() {
-
-    mainAudio = document.querySelector("#main-audio");
-    playPauseBtn = document.querySelector(".play-pause");
-    progressArea = document.querySelector(".song-progress-area");
-    progressBar = document.querySelector(".song-progress-bar");
-
+function songPlayFunction() {
+    let mainAudio = document.querySelector("#main-audio");
+    let playPauseBtn = document.querySelector(".play-pause");
+    let progressArea = document.querySelector(".song-progress-area");
+    let progressBar = document.querySelector(".song-progress-bar");
 
 
     // play music function
@@ -77,9 +75,82 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(mainAudio.currentTime);
         playMusic();
         console.log(mainAudio.currentTime);
-
-
     });
+
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    let songs = document.querySelectorAll(".song-wrapper");
+    console.log(songs);
+
+    songs.forEach((song) => {
+        let favouriteBtn = song.querySelector(".fa-heart");
+        favouriteBtn.addEventListener('click', (element) => favourite_action(song));
+    });
+
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+
+        let profile_user = document.querySelector("#username").innerHTML;
+        let followBtn = document.querySelector("#follow-button");
+        let followingCounts = document.querySelector("#following_counts");
+        let followerCounts = document.querySelector("#follower_counts");
+        console.log(followBtn);
+
+
+        followBtn.addEventListener('click', () => {
+            fetch(`/account/user/${profile_user}`, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     "followingStatus": followBtn.innerHTML
+                  })
+            })
+            .then(response => response.json())
+            .then(data=>{
+                followBtn.innerHTML = data["followingStatus"];
+                followingCounts.innerHTML = data["following_counts"];
+                followerCounts.innerHTML = data["follower_counts"];
+            });
+        });
+});
+
+
+
+function favourite_action(song) {
+
+
+    let favouriteBtn = song.querySelector(".fa-heart");
+    let song_id = song.dataset.id;
+    console.log(song_id);
+
+    fetch(`/songs/${song_id}/action/`, {
+          method: 'PUT',
+          body: JSON.stringify({
+              favourite: 'toggle',
+          })
+    })
+    .then(response => response.json());
+
+
+
+    if (favouriteBtn.classList.contains("favourite")) {
+        favouriteBtn.classList.remove("favourite");
+    } else {
+        favouriteBtn.classList.add("favourite");
+    }
+
+    if (window.location.toString().includes("favourites")) {
+        song.remove();
+    }
+
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    songPlayFunction();
+
 
 
 });

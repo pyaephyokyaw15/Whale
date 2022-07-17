@@ -5,6 +5,11 @@ from .models import Song, Genre, Mood, Comment
 from django.urls import reverse
 from django.db.models import Q
 from .forms import CommentForm
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
+import json
 
 
 # Create your views here.
@@ -117,12 +122,34 @@ def song_detail(request, pk):
         return render(request, 'songs/song_detail.html', context=context)
 
 
+@csrf_exempt
+@login_required
+def song_action(request, pk):
+    # Query for requested song
+    try:
+        song = Song.objects.get(pk=pk)
+    except Song.DoesNotExist:
+        return JsonResponse({"error": "Song does not exist."}, status=404)
 
-def song_like(request, pk):
-    song = Song.objects.get(pk=pk)
-    if request.user in song.favourite_by.all():
-        song.favourite_by.remove(request.user)
-    else:
-        song.favourite_by.add(request.user)
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        print(data)
+        if data.get("favourite"):
+            if request.user in song.favourite_by.all():
+                favourite = False
+                song.favourite_by.remove(request.user)
+            else:
+                song.favourite_by.add(request.user)
+                favourite = True
 
-    return redirect('songs:all_songs')
+        song.save()
+
+        response = {
+            "favourite": favourite
+        }
+
+        print("Hay It is OK")
+        return JsonResponse(response)
+
+
+

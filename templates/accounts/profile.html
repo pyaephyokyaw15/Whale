@@ -9,22 +9,22 @@
             <div class="col col-md-4">
                 <div class="row">
                     <div class="col">
-                        <h5>Pyae Phyo Kyaw</h5>
+                        <h5>{{ profile_user.first_name }}</h5>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <p>{{ user.username }}</p>
+                        <p id="username">{{ profile_user.username }}</p>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <p>Followers: {{follower_counts}}</p>
+                        <p>Followers: <span id="follower_counts">{{follower_counts}}</span></p>
                     </div>
                     <div class="col">
-                         <p>Following: {{ following_counts }}</p>
+                         <p>Following: <span id="following_counts">{{ following_counts }}</span> </p>
                     </div>
                 </div>
 
@@ -32,9 +32,11 @@
 
 
                 <div class="row">
-                    <div class="col">
-                        <button>Follow</button>
-                    </div>
+                    {% if follow_button_visibility %}
+                        <div class="col">
+                            <button id="follow-button">{{ status }}</button>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -69,11 +71,11 @@
 
                         {% if song in user.favourite_songs.all %}
                            <td class='align-middle' style="width: 10%">
-                               <a href="{% url 'songs:song_like'  song.pk %}"><i class="favourite far fa-heart"></i></a>
+                               <a href="{% url 'songs:song_action'  song.pk %}"><i class="favourite far fa-heart"></i></a>
                            </td>
                         {% else %}
                            <td class='align-middle' style="width: 10%">
-                               <a href="{% url 'songs:song_like'  song.pk %}"><i class="far fa-heart"></i></a>
+                               <a href="{% url 'songs:song_action'  song.pk %}"><i class="far fa-heart"></i></a>
                           </td>
                         {% endif %}
 
