@@ -7,33 +7,9 @@ from accounts.models import User
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import UpdateView
 
 # Create your views here.
-def profile(request, username):
-    try:
-        user = User.objects.get(username=username)
-
-    except User.DoesNotExist:
-        return HttpResponseNotFound("User does not exist")
-
-
-
-    songs = Song.objects.filter(owner=user)
-    favourite_songs = Song.objects.filter(favourite_by=request.user).all()
-    uploaded_songs = Song.objects.filter(owner=request.user).all()
-
-    context = {
-        "songs": songs,
-        'following_counts': user.following.count,
-        'follower_counts': user.followers.count,
-        "favourite_songs": favourite_songs,
-        "uploaded_songs": uploaded_songs
-    }
-    return render(request, 'accounts/profile.html', context=context)
-
-
-
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -50,11 +26,29 @@ def register(request):
     return render(request, 'accounts/register.html', context)
 
 
-def profile_change(request, username):
+class ProfileUpdateView(UpdateView):
+    # specify the model you want to use
+    model = User
+
+    # specify the fields
+    fields = [
+        "first_name",
+        "last_name",
+        "profile_picture"
+    ]
+
+    # can specify success url
+    # url to redirect after successfully
+    # updating details
+    template_name = 'accounts/setting.html'
+
+
+def setting(request):
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
         print(form.errors)
+
         if form.is_valid():
             form.save()
 
@@ -63,7 +57,7 @@ def profile_change(request, username):
     context = {
         'form': form,
     }
-    return render(request, 'accounts/profile_change.html', context)
+    return render(request, 'accounts/setting.html', context)
 
 
 @csrf_exempt

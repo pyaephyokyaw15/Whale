@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.utils import dateformat
 
 User = settings.AUTH_USER_MODEL
 
@@ -14,6 +15,13 @@ class Mood(models.Model):
     def __str__(self):
         return self.name
 
+    def get_url(self):
+        # query string reverse
+        # https://stackoverflow.com/questions/4995279/including-a-querystring-in-a-django-core-urlresolvers-reverse-call
+        return f"{reverse('songs:songs')}?mood={self.slug}"
+
+
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=50)
@@ -22,6 +30,9 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_url(self):
+        return f"{reverse('songs:songs')}?genre={self.slug}"
 
 
 class Song(models.Model):
@@ -49,7 +60,7 @@ class Song(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('songs:all_songs')
+        return reverse('songs:songs')
 
 
 class Comment(models.Model):
@@ -58,8 +69,27 @@ class Comment(models.Model):
     song = models.ForeignKey(Song, related_name="comments", on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-created_on']
+
     def __str__(self):
         return f'{self.song}:{self.owner}'
+
+
+
+    def serialize(self):
+
+        date_time_format = dateformat.DateFormat(self.created_on).format('F j, Y,  P')
+        return {
+            "id": self.id,
+            "text": self.text,
+            "owner": self.owner.username,
+            "image": self.owner.profile_picture.url,
+            "song": self.song.title,
+            "created_on": date_time_format,
+
+        }
+
 
 
 
