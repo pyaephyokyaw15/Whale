@@ -1,25 +1,30 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block main %}
     <div class="container-lg">
         <div class="row align-items-center my-3">
             <div class="col col-md-3">
-                <img id="profile-large" src="{{ user.profile_picture.url }}" alt="image">
+                <img id="profile-large" src="{{ profile_user.profile_picture.url }}" alt="image">
             </div>
             <div class="col col-md-4">
                 <div class="row">
                     <div class="col">
-                        <h5>{{ profile_user.first_name }}</h5>
+                        <h5>{{ profile_user.get_full_name }}</h5>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <p id="username">{{ profile_user.username }}</p>
+                        {% if profile_user.authentic %}
+                            <i class="fas fa-check-circle"></i>
+                        {% endif %}
+
+                        <span id="username">{{ profile_user.username }}</span>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="margin-top:20px;">
                     <div class="col">
                         <p>Followers: <span id="follower_counts">{{follower_counts}}</span></p>
                     </div>
@@ -34,7 +39,7 @@
                 <div class="row">
                     {% if follow_button_visibility %}
                         <div class="col">
-                            <button id="follow-button">{{ status }}</button>
+                            <button id="my-btn" class="btn">{{ status }}</button>
                         </div>
                     {% endif %}
                 </div>
@@ -45,37 +50,44 @@
 
         <ul class="nav nav-tabs my-4">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">Uploaded</a>
+                <a id="uploaded-btn" class="nav-link active" aria-current="page" href="#">Uploaded</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#">Favourite</a>
+                <a id="favourite-btn" class="nav-link" href="#">Favourite</a>
             </li>
 
         </ul>
 
-        <table class="table  table-hover ">
-            <tbody>
+        <table id="uploaded-songs" class="table  table-hover ">
+            <tbody class="songs-wrapper">
+
                 {% for song in uploaded_songs %}
-                    <tr>
-                        <td class='align-middle text-center'>
+                    <tr class="song-wrapper" data-id="{{ song.id }}">
+                        <td class='align-middle text-center' style="width: 10%">
                             <img src="{{ song.banner.url }}" alt="logo" class="song-thumbnail">
                         </td>
-                        <td class='align-middle'>
+
+                        <td class='align-middle' style="width: 70%">
                             <p class="song">{{ song.title }}</p>
-                            <p class="artist">{{ song.owner }}</p>
+                            {% if song.owner.authentic %}
+                                <i class="fas fa-check-circle"></i>
+                            {% endif %}
+                            <a href="{% url 'accounts:profile'  song.owner.username  %}">{{ song.owner }}</a>
                         </td>
 
-                        <td class='align-middle'>
-                            <i class="far fa-play-circle fa-lg"></i>
+                        <td class='align-middle' style="width: 5%">
+                            <a href="{% url 'songs:song_detail'  song.id  %}"><i class="far fa-play-circle fa-lg"></i></a>
                         </td>
+
+
 
                         {% if song in user.favourite_songs.all %}
                            <td class='align-middle' style="width: 10%">
-                               <a href="{% url 'songs:song_action'  song.pk %}"><i class="favourite far fa-heart"></i></a>
+                               <span><i class="favourite fa fa-heart"></i></span>
                            </td>
                         {% else %}
                            <td class='align-middle' style="width: 10%">
-                               <a href="{% url 'songs:song_action'  song.pk %}"><i class="far fa-heart"></i></a>
+                               <span><i class="unfavourite fa fa-heart"></i></span>
                           </td>
                         {% endif %}
 
@@ -83,9 +95,51 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <table id="favourite-songs" class="table  table-hover ">
+            <tbody class="songs-wrapper">
+
+                {% for song in favourite_songs %}
+                    <tr class="song-wrapper" data-id="{{ song.id }}">
+                        <td class='align-middle text-center' style="width: 10%">
+                            <img src="{{ song.banner.url }}" alt="logo" class="song-thumbnail">
+                        </td>
+
+                        <td class='align-middle' style="width: 70%">
+                            <p class="song">{{ song.title }}</p>
+                            <a href="{% url 'accounts:profile'  song.owner.username  %}">{{ song.owner }}</a>
+                        </td>
+
+                        <td class='align-middle' style="width: 5%">
+                            <a href="{% url 'songs:song_detail'  song.id  %}"><i class="far fa-play-circle fa-lg"></i></a>
+                        </td>
+
+
+
+                        {% if song in user.favourite_songs.all %}
+                           <td class='align-middle' style="width: 10%">
+                               <span><i class="favourite far fa-heart"></i></span>
+                           </td>
+                        {% else %}
+                           <td class='align-middle' style="width: 10%">
+                               <span><i class="far fa-heart"></i></span>
+                          </td>
+                        {% endif %}
+
+                    </tr>
+                {% endfor %}
+
+
+            </tbody>
+        </table>
     </div>
 
 
 
 
+{% endblock %}
+
+{% block js_files %}
+    {{ block.super }}
+    <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

@@ -5,15 +5,15 @@
      <div class="container-lg">
         <div class="row align-items-center justify-content-center">
             <div class="col d-flex justify-content-center">
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     <!-- csrf prevents from attackers. If we don;t include, it will not run. -->
                     {% csrf_token %}
                     <fieldset class="form-group">
-                        <legend class="border-bottom mb-4">Log In</legend>
+                        <legend class="border-bottom mb-4">Profile Setting</legend>
                         {{ form|crispy }}
                     </fieldset>
                     <div class="form-group">
-                        <button class="btn btn-outline-info" type="submit">Save</button>
+                        <button id="my-btn" class="btn" type="submit">Save</button>
                     </div>
                 </form>
             </div>

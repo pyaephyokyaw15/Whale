@@ -1,7 +1,14 @@
+body {
+    background-color: #c0dce1;
+}
+
+a {
+    text-decoration: none;
+}
 .profile-thumbnail {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
     background-color: inherit;
 }
 
@@ -47,7 +54,7 @@ i.fa-heart {
 
 
 .unfavourite{
-    color: black;
+    color: white;
 }
 
 
@@ -78,4 +85,46 @@ i.fa-heart {
 
 }
 
+#favourite-songs {
+    display: none;
+}
 
+#uploaded-btn, #favourite-btn {
+    color: black;
+}
+
+.fa-play-circle {
+    color: #137FF1;
+}
+
+# comment-text {
+    width: 500px;
+    height: 500px;
+}
+
+.comment-text-box {
+    margin-top: 10px;
+   padding: 10px;
+    word-wrap: break-word;
+   border-radius: 10px;
+   border: 2px solid white;
+   height: auto;
+}
+
+#my-btn, #comment-btn {
+    color: white;
+    background-color: #3c99e5;
+    border-radius: 10px;
+    margin: 15px 0px;
+}
+
+
+.fa-check-circle {
+    color: #3c99e5;
+    font-size: 12px;
+
+}
+
+label {
+    margin: 10px 0px 5px 0px;
+}

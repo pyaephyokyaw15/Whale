@@ -1,7 +1,7 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg p-0 navbar-dark sticky-top" style="background-color: #1c7ac7">
+<nav class="navbar navbar-expand-lg p-0 navbar-dark sticky-top" style="background-color: #3c99e5">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img class='logo' src="{% static 'images/whale.png' %}"  alt="">Whale</a>
+        <a class="navbar-brand" href="{% url 'songs:songs' %}"><img class='logo' src="{% static 'images/whale.png' %}"  alt="">Whale</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,31 +9,31 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav  me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/">Home</a>
+                    <a id="nav-songs" class="nav-link" href="{% url 'songs:songs' %}">All Songs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'songs:all_songs' %}">All Songs</a>
+                    <a id="nav-following" class="nav-link" href="{% url 'songs:songs' %}?following=True">Following</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'songs:favourite_songs' %}">Favourites</a>
+                    <a id="nav-favourite" class="nav-link" href="{% url 'songs:songs' %}?favourite=True">Favourites</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="moods" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a id="nav-moods" class="nav-link dropdown-toggle" href="#" id="moods" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Moods
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         {% for mood in moods %}
-                            <a class="dropdown-item" href="{% url 'songs:mood_songs' mood.slug %}">{{ mood }}</a>
+                            <a class="dropdown-item" href="{{ mood.get_url }}">{{ mood }}</a>
                         {% endfor %}
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="genres" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a id="nav-genres" class="nav-link dropdown-toggle" href="#" id="genres" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Genres
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         {% for genre in genres %}
-                            <a class="dropdown-item" href="{% url 'songs:genre_songs' genre.slug %}">{{ genre }}</a>
+                            <a class="dropdown-item" href="{{ genre.get_url }}">{{ genre }}</a>
                         {% endfor %}
                     </div>
                 </li>
@@ -42,14 +42,14 @@
 
 
             <ul class="navbar-nav mb-2 m-lg-0">
-                <form action="{% url 'songs:search' %}" role="search">
+                <form action="{% url 'songs:songs' %}" role="search">
                     <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="q">
                 </form>
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'songs:upload' %}">Upload</a>
+                    <a id="nav-upload" class="nav-link" href="{% url 'songs:upload' %}">Upload</a>
                 </li>
             </ul>
 
@@ -58,14 +58,16 @@
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {% if user.is_authenticated %}
                             <img class="profile-thumbnail" src="{{ user.profile_picture.url }}"  alt="image">
+                            <span>{{ user.username }}</span>
                         {% else %}
-                            <img class="profile-thumbnail" src="{% static 'images/user.png' %}"  alt="image">
+                            <img class="profile-thumbnail" src="{% static 'images/whale.png' %}"  alt="image">
                         {% endif %}
+
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         {% if user.is_authenticated %}
                             <a class="dropdown-item" href="{% url 'accounts:profile' user.username %}">Profile</a>
-                            <a class="dropdown-item" href="#">Setting</a>
+                            <a class="dropdown-item" href="{% url 'accounts:setting' %}">Setting</a>
                             <hr class="dropdown-divider">
                             <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
                         {% else %}
