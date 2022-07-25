@@ -79,7 +79,7 @@ class FavouriteSongListView(LoginRequiredMixin, ListView):
 
 
 
-class SongUploadView(CreateView):
+class SongUploadView(LoginRequiredMixin,CreateView):
     model = Song
     template_name = 'songs/upload.html'
     fields = ['title', 'banner', 'audio_file', 'mood', 'genre']

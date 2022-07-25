@@ -131,11 +131,11 @@
         function next(){
             console.log('Next');
             console.log({{ next_song.id }})
-            window.open('http://127.0.0.1:5001/songs/{{ next_song.id }}/?{{ query_string }}',"_self")
+            window.open('http://127.0.0.1:8000/songs/{{ next_song.id }}/?{{ query_string }}',"_self")
         }
          function previous(){
             console.log('Previous');
-            window.open('http://127.0.0.1:5001/songs/{{ previous_song.id }}/?{{ query_string }}',"_self")
+            window.open('http://127.0.0.1:8000/songs/{{ previous_song.id }}/?{{ query_string }}',"_self")
         }
 
     </script>

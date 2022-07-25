@@ -104,7 +104,7 @@ function favourite_action(song) {
         console.log(data);
         if (data.status == "false") {
             console.log("Error");
-            window.open(`http://127.0.0.1:5001/account/login/?next=${window.location.toString()}`,"_self")
+            window.open(`http://127.0.0.1:8000/account/login/?next=${window.location.toString()}`,"_self")
         }
 
         else {
