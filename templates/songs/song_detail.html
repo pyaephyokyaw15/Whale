@@ -1,0 +1,149 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block main %}
+    <div class="container-lg song-detail-wrapper" data-id="{{ song.id }}">
+        <div class="row align-items-center justify-content-center my-4">
+
+
+            <div class="col col-md-3 d-flex justify-content-center">
+                <img id="profile-large" src="{{ song.banner.url }}" alt="image">
+            </div>
+
+            <div class="col col-md-4">
+                <div class="row">
+                    <div class="col">
+                        <h5>{{ song.title }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {% if song.owner.authentic %}
+                                <i class="fas fa-check-circle"></i>
+                        {% endif %}
+                        <a href="{% url 'accounts:profile'  song.owner.username  %}">{{ song.owner }}</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row align-items-center justify-content-center my-3">
+            <div class="col col-md-5 d-flex justify-content-center">
+                <div class="song-progress-area">
+                    <div class="song-progress-bar">
+                        <audio id="main-audio" src="{{ song.audio_file.url }}" autoplay></audio>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center justify-content-center my-3">
+
+            <div class="col col-md-5 d-flex justify-content-center">
+                <div class="song-timer d-flex justify-content-between">
+                    <span class="current-time">0:00</span>
+                    <span class="max-duration">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center justify-content-center my-3">
+            <div class="col col-md-5 d-flex justify-content-between">
+                <i onclick='previous()' id="prev" class="material-icons">skip_previous</i>
+                <div class="my-auto play-pause paused">
+                    <i id="play-pause" class="material-icons" >pause</i>
+                </div>
+                <i onclick='next()' id="next" class="material-icons">skip_next</i>
+                 {% if song in user.favourite_songs.all %}
+                       <i class="favourite fa fa-heart"></i>
+                 {% else %}
+                       <i class="unfavourite fa fa-heart"></i>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row align-items-center justify-content-center my-3">
+            <div class="col col-12 col-md-6">
+                <h5>Comments</h5>
+
+                {% if user.is_authenticated %}
+                    <h6>Post your comment:</h6>
+                    <div class="row">
+                        <form>
+                            <div class="input-field col s8">
+                                {{ comment_form|crispy }}
+                            </div>
+                            <div class="input-field col s4">
+                                <button id="comment-btn" class="btn" type="button" name="comment">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+
+
+                {% else %}
+                    <p>Please <a href="{% url 'accounts:login' %}">login</a> to comment.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row align-items-center justify-content-center my-3">
+            <div id="comment-list" class="col col-12 col-md-6">
+                 {% for comment in comments %}
+                      <div class="comment-box row align-items-center">
+                          <div class="col col-1">
+                              <img class="profile-thumbnail" src="{{ comment.owner.profile_picture.url }}" alt="image">
+                          </div>
+                          <div class="col col-11">
+                              {% if song.owner.authentic %}
+                                <i class="fas fa-check-circle"></i>
+                              {% endif %}
+                              <a href="{% url 'accounts:profile'  comment.owner  %}">{{ comment.owner }}</a>
+
+                              <p class="comment-date" style="margin-top: 0px;margin-bottom: 0px">{{ comment.created_on }}</p>
+                          </div>
+
+
+                      </div>
+                      <div class="row align-items-center justify-content-end">
+                          <div class="comment-text-box col col-11">
+                              {{ comment.text }}
+                          </div>
+                      </div>
+                      <br>
+                {% empty %}
+                      No comments yet!
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        mainAudio = document.querySelector("#main-audio");
+        mainAudio.addEventListener("ended", ()=>{
+            console.log('End');
+            next();
+        });
+
+        function next(){
+            console.log('Next');
+            console.log({{ next_song.id }})
+            window.open('http://127.0.0.1:8000/songs/{{ next_song.id }}/?{{ query_string }}',"_self")
+        }
+         function previous(){
+            console.log('Previous');
+            window.open('http://127.0.0.1:8000/songs/{{ previous_song.id }}/?{{ query_string }}',"_self")
+        }
+
+    </script>
+
+
+{% endblock %}
+
+{% block js_files %}
+    {{ block.super }}
+    <script src="{% static 'js/song-detail.js' %}"></script>
+{% endblock %}
