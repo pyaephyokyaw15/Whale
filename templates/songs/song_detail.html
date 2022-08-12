@@ -15,6 +15,7 @@
                 <div class="row">
                     <div class="col">
                         <h5>{{ song.title }}</h5>
+
                     </div>
                 </div>
                 <div class="row">
@@ -23,6 +24,19 @@
                                 <i class="fas fa-check-circle"></i>
                         {% endif %}
                         <a href="{% url 'accounts:profile'  song.owner.username  %}">{{ song.owner }}</a>
+
+                        {% if song.owner == request.user %}
+                            <div class="mt-3">
+                                    <form method="POST" action="{% url 'songs:delete' song.id %}">
+                                        {% csrf_token %}
+                                        <a href="{% url 'songs:edit' song.id %}" class="me-5"><i class="fas fa-edit"></i></a>
+                                        <button type="submit" class="my-delete-button">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                            </div>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
@@ -64,22 +78,20 @@
             </div>
         </div>
 
-        <div class="row align-items-center justify-content-center my-3">
+        <div class="row align-items-center justify-content-center mt-5">
             <div class="col col-12 col-md-6">
                 <h5>Comments</h5>
 
                 {% if user.is_authenticated %}
-                    <h6>Post your comment:</h6>
-                    <div class="row">
-                        <form>
-                            <div class="input-field col s8">
-                                {{ comment_form|crispy }}
-                            </div>
-                            <div class="input-field col s4">
-                                <button id="comment-btn" class="btn" type="button" name="comment">Submit</button>
-                            </div>
-                        </form>
-                    </div>
+
+                    <form class="row">
+                        <div class="col col-12">
+                            <div id="comment-box" autofocus contenteditable></div>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <button id="comment-btn" class="btn" type="button" name="comment">Comment</button>
+                        </div>
+                    </form>
 
 
                 {% else %}
@@ -91,27 +103,45 @@
         <div class="row align-items-center justify-content-center my-3">
             <div id="comment-list" class="col col-12 col-md-6">
                  {% for comment in comments %}
-                      <div class="comment-box row align-items-center">
-                          <div class="col col-1">
-                              <img class="profile-thumbnail" src="{{ comment.owner.profile_picture.url }}" alt="image">
-                          </div>
-                          <div class="col col-11">
-                              {% if song.owner.authentic %}
-                                <i class="fas fa-check-circle"></i>
-                              {% endif %}
-                              <a href="{% url 'accounts:profile'  comment.owner  %}">{{ comment.owner }}</a>
+                    <div class="comment" data-id="{{ comment.id }}">
+                        <div class="comment-box row align-items-center">
+                              <div class="col col-1">
+                                  <img class="profile-thumbnail" src="{{ comment.owner.profile_picture.url }}" alt="image">
+                              </div>
+                              <div class="col col-11">
+                                  {% if song.owner.authentic %}
+                                    <i class="fas fa-check-circle"></i>
+                                  {% endif %}
+                                  <a href="{% url 'accounts:profile'  comment.owner  %}">{{ comment.owner }}</a>
 
-                              <p class="comment-date" style="margin-top: 0px;margin-bottom: 0px">{{ comment.created_on }}</p>
-                          </div>
+                                  <p class="comment-date" style="margin-top: 0px;margin-bottom: 0px">{{ comment.created_on }}</p>
+                              </div>
+                        </div>
+                        <div class="row align-items-center justify-content-end">
+                            <div class="comment-text-box col col-11">
+                              {{ comment.text|safe }}
+                            </div>
+                        </div>
+                        {% if comment.owner == request.user %}
+                            <div class="row mt-2 comment-action">
+                               <div class="col-auto ms-auto">
+                                   <button class="comment-edit-button">
+                                        <i class="fas fa-edit"></i>
+                                   </button>
+                               </div>
+                               <div class="col-auto">
+                                   <button class="comment-delete-button">
+                                        <i class="fa fa-trash"></i>
+                                   </button>
+                               </div>
+                                <div class="col-auto">
+                                   <button id="comment-update-btn" class="btn" type="button">Save</button>
+                               </div>
+                            </div>
+                        {% endif %}
+                        <br>
+                    </div>
 
-
-                      </div>
-                      <div class="row align-items-center justify-content-end">
-                          <div class="comment-text-box col col-11">
-                              {{ comment.text }}
-                          </div>
-                      </div>
-                      <br>
                 {% empty %}
                       No comments yet!
                 {% endfor %}

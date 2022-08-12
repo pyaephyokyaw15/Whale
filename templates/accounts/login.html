@@ -3,28 +3,40 @@
 
 {% block main %}
      <div class="container-lg">
-        <div class="row align-items-center justify-content-center">
-            <div class="col d-flex justify-content-center">
-                <form method="POST">
-                    <!-- csrf prevents from attackers. If we don;t include, it will not run. -->
-                    {% csrf_token %}
-                    <fieldset class="form-group">
-                        <legend class="border-bottom mb-4">Log In</legend>
-                        {{ form|crispy }}
-                    </fieldset>
-                    <div class="form-group">
-                        <button id="my-btn" class="btn" type="submit">Log in</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+         <div id="form-wrapper" class="row align-items-center justify-content-center">
+            <form id="my-form" method="POST" class="col-md-5 col-xl-4">
+                <!-- csrf prevents from attackers. If we don;t include, it will not run. -->
+                {% csrf_token %}
 
-         <div class="row align-items-center justify-content-center">
-            <div class="col d-flex justify-content-center">
-                <small class="text-muted">
-                    Need  An Account? <a class="ml-2" href="{% url 'accounts:register' %}">Sign Up Now</a>
-                </small>
-            </div>
-        </div>
-    </div>
+                <div class="form-group">
+                    <label >Username</label>
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group">
+                        {{ form.password }}
+                        <span class="input-group-text"><i class="far fa-eye-slash" id="togglePassword" style="cursor: pointer"></i></span>
+                    </div>
+                    {{ form.password.errors }}
+                </div>
+                 <div class="form-group">
+                     {{ form.non_field_errors }}
+                 </div>
+
+                <div class="form-group">
+                    <button id="my-btn" class="btn form-control" type="submit">Login</button>
+                </div>
+                <div class="row align-items-center justify-content-center">
+                    <div class="col d-flex justify-content-center">
+                        <small class="text-muted">
+                            Need  An Account? <a class="ml-2" href="{% url 'accounts:register' %}">Sign Up Now</a>
+                        </small>
+                    </div>
+                </div>
+            </form>
+         </div>
+     </div>
+
 {% endblock %}

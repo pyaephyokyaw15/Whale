@@ -1,4 +1,12 @@
-body {
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    height: 100vh;
+    width: 100%;
     background-color: #c0dce1;
 }
 
@@ -111,13 +119,17 @@ i.fa-heart {
    height: auto;
 }
 
-#my-btn, #comment-btn, #follow-button {
+#my-btn, #comment-btn, #follow-button, #comment-update-btn {
     color: white;
     background-color: #3c99e5;
     border-radius: 10px;
     margin: 15px 0px;
 }
 
+#comment-update-btn {
+    margin: 5px 0px;
+    display: none;
+}
 
 .fa-check-circle {
     color: #3c99e5;
@@ -127,4 +139,41 @@ i.fa-heart {
 
 label {
     margin: 10px 0px 5px 0px;
+}
+
+
+
+#my-form {
+     padding: 20px;
+     border-radius: 10px;
+     border: 2px solid white;
+     margin-top: 50px;
+     margin-bottom: 50px;
+}
+
+.errorlist {
+    margin-top: 10px;
+}
+
+.errorlist li {
+    color: #ff5a1f;
+}
+
+legend {
+    border-bottom: 2px solid white;
+}
+
+
+#comment-box {
+    padding: 10px 0px;
+    width: 100%;
+    outline: none;
+    border: 0px;
+    background: transparent;
+    border-bottom: 2px solid black;
+}
+
+.my-delete-button, .my-edit-button, .comment-delete-button, .comment-edit-button {
+    background: transparent;
+    border: none;
 }

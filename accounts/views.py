@@ -51,6 +51,7 @@ def setting(request):
 
         if form.is_valid():
             form.save()
+            return redirect('accounts:profile', username=request.user.username)
 
     else:
         form = ProfileForm(instance=request.user)

@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Song, Genre, Mood, Comment
 from django.urls import reverse
 from django.db.models import Q
-from .forms import CommentForm
+from .forms import CommentForm, UploadForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -12,11 +12,14 @@ from django.http import JsonResponse
 import json
 from django.http import HttpResponse, HttpResponseNotFound
 
+
+
 # Create your views here.
 class SongListView(ListView):
     model = Song
     template_name = 'songs/songs.html'
     context_object_name = 'songs'
+
 
     def get_queryset(self):
         mood_query = self.request.GET.get('mood')
@@ -82,18 +85,53 @@ class FavouriteSongListView(LoginRequiredMixin, ListView):
 class SongUploadView(LoginRequiredMixin,CreateView):
     model = Song
     template_name = 'songs/upload.html'
-    fields = ['title', 'banner', 'audio_file', 'mood', 'genre']
+    form_class = UploadForm
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
+class SongEditView(LoginRequiredMixin,UpdateView):
+    model = Song
+    template_name = 'songs/edit-song.html'
+    form_class = UploadForm
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        view_name = 'songs:song_detail'
+        # No need for reverse_lazy here, because it's called inside the method
+        return reverse(view_name, kwargs={'pk': self.object.pk})
+
+class SongDeleteView(LoginRequiredMixin,DeleteView):
+    model = Song
+    def get_success_url(self):
+        current_song_id = self.request.session['current_song_id']
+        next_song_id = self.request.session['next_song_id']
+        query_string = self.request.session['query_string']
+
+        # If current_song and next_song are equal, it means there is only one song left.
+        # In this situation, if we delete the current song, the next song does not exist.
+        # So, we need to check this .
+        next_song_exist = current_song_id != next_song_id
+
+        # if next_song exists, go to next_song
+        # else, go to the song_list according to query_string
+        if next_song_exist:
+            return 'http://127.0.0.1:8000/songs/{}/?{}'.format(next_song_id, query_string)
+
+        else:
+            return 'http://127.0.0.1:8000/songs/?{}'.format(query_string)
+
+
 def song_detail(request, pk):
     try:
         song = Song.objects.get(pk=pk)
     except Song.DoesNotExist:
-        return HttpResponseNotFound("User does not exist")
+        return HttpResponseNotFound("Song does not exist")
 
     mood_query = request.GET.get('mood')
     genre_query = request.GET.get('genre')
@@ -159,6 +197,11 @@ def song_detail(request, pk):
     comments = Comment.objects.filter(song=song)
     comment_form = CommentForm()
 
+    # store values in session for further use
+    request.session['next_song_id'] = next_song.id
+    request.session['current_song_id'] = pk
+    request.session['query_string'] = query_string
+
     context = {
         "song": song,
         "next_song": next_song,
@@ -167,6 +210,8 @@ def song_detail(request, pk):
         "comment_form": comment_form,
         "query_string": query_string
     }
+
+
     return render(request, 'songs/song_detail.html', context=context)
 
 
@@ -189,7 +234,7 @@ def song_detail_action(request, pk):
             temp.song = song
             temp.save()
 
-        return JsonResponse(temp.serialize())
+            return JsonResponse(temp.serialize())
 
     if request.method == "PUT":
         data = json.loads(request.body)
@@ -211,6 +256,34 @@ def song_detail_action(request, pk):
         print("Hay It is OK")
         return JsonResponse(response)
 
+@csrf_exempt
+def comment_action(request, pk):
+    if request.method == "DELETE":
+        comment = Comment.objects.get(pk=pk)
+        comment.delete()
+
+        response = {
+            "delete": "OK"
+        }
+
+        print("Hay It is OK")
+        return JsonResponse(response)
+
+
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        print(data)
+        comment_text = data.get('comment_text')
+        comment = Comment.objects.get(pk=pk)
+        comment.text = comment_text
+        comment.save()
+
+        response = {
+            "update": "OK"
+        }
+
+        print("Hay It is OK")
+        return JsonResponse(response)
 
 
 

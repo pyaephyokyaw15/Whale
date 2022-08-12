@@ -1,34 +1,40 @@
 {% extends 'layout.html' %}
 {% load crispy_forms_tags %}
-{% load static %}
 
 {% block main %}
-
-
-     <div class="container-lg">
+    <div class="container-lg">
         <div class="row align-items-center justify-content-center">
             <div class="col d-flex justify-content-center">
                 <form id="my-form" method="POST" enctype="multipart/form-data" class="col-md-5 col-xl-4">
                     <!-- csrf prevents from attackers. If we don;t include, it will not run. -->
                     {% csrf_token %}
 
-
                     <fieldset class="form-group">
-                        <legend>Profile Setting</legend>
+                        <legend>Edit Song</legend>
                         <div class="form-group">
-                            <label>First Name</label>
-                            {{ form.first_name }}
-                            {{ form.first_name.errors }}
+                            <label>Title</label>
+                            {{ form.title }}
+                            {{ form.title.errors }}
                         </div>
                         <div class="form-group">
-                            <label>Last Name</label>
-                            {{ form.last_name }}
-                            {{ form.last_name.errors }}
+                            <label>Banner</label>
+                            {{ form.banner }}
+                            {{ form.banner.errors }}
                         </div>
                         <div class="form-group">
-                            <label>Image</label>
-                            {{ form.profile_picture }}
-                            {{ form.profile_picture.errors }}
+                            <label>Audio File</label>
+                            {{ form.audio_file }}
+                            {{ form.audio_file.errors }}
+                        </div>
+                        <div class="form-group">
+                            <label>Mood</label>
+                            {{ form.mood }}
+                            {{ form.mood.errors }}
+                        </div>
+                        <div class="form-group">
+                            <label>Genre</label>
+                            {{ form.genre }}
+                            {{ form.genre.errors }}
                         </div>
                          <div class="form-group">
                              {{ form.non_field_errors }}
@@ -41,4 +47,5 @@
             </div>
         </div>
     </div>
+
 {% endblock %}

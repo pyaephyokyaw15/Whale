@@ -134,5 +134,26 @@ function favourite_action(song) {
 
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    let togglePasswordBtn = document.querySelector("#togglePassword");
+    let passwordField = document.querySelector("#id_password");
+    console.log(togglePassword);
 
+    togglePasswordBtn.addEventListener('click', (element) => {
+
+        let inputType = passwordField.getAttribute("type")
+        if (inputType == "password") {
+            passwordField.setAttribute("type","text");
+            togglePasswordBtn.classList.remove("fa-eye-slash");
+            togglePasswordBtn.classList.add("fa-eye");
+        } else {
+            passwordField.setAttribute("type","password");
+            togglePasswordBtn.classList.remove("fa-eye");
+            togglePasswordBtn.classList.add("fa-eye-slash");
+        }
+
+
+    });
+
+});
 

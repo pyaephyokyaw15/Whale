@@ -79,12 +79,14 @@ class Comment(models.Model):
 
     def serialize(self):
 
-        date_time_format = dateformat.DateFormat(self.created_on).format('F j, Y,  P')
+        date_time_format = dateformat.DateFormat(self.created_on).format('M. j, Y,  P')
         return {
             "id": self.id,
             "text": self.text,
             "owner": self.owner.username,
+            "is_authentic_owner": self.owner.authentic,
             "image": self.owner.profile_picture.url,
+            "profile_url": reverse("accounts:profile", kwargs={"username": self.owner.username}),
             "song": self.song.title,
             "created_on": date_time_format,
 

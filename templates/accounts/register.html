@@ -2,31 +2,51 @@
 {% load crispy_forms_tags %}
 
 {% block main %}
-     <div class="container-lg">
-        <div class="row align-items-center justify-content-center">
-            <div class="col d-flex justify-content-center">
-                <form method="POST">
-                    <!-- csrf prevents from attackers. If we don;t include, it will not run. -->
-                    {% csrf_token %}
-                    <fieldset class="form-group">
-                        <legend class="border-bottom mb-4">Register</legend>
-                        {{ form|crispy }}
-                    </fieldset>
+    <div class="container-lg">
+         <div id="form-wrapper" class="row align-items-center justify-content-center">
+            <form id="my-form" method="POST" class="col-md-5 col-xl-4">
+                <!-- csrf prevents from attackers. If we don;t include, it will not run. -->
+                {% csrf_token %}
 
-                    <div class="form-group">
-                        <button id="my-btn" class="btn" type="submit">Register</button>
+                <div class="form-group">
+                    <label >Username</label>
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group">
+                        {{ form.password1 }}
+                        <span class="input-group-text"><i class="far fa-eye-slash" id="togglePassword" style="cursor: pointer"></i></span>
                     </div>
-                </form>
-            </div>
-        </div>
+                    {{ form.password1.errors }}
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <div class="input-group">
+                        {{ form.password2 }}
+                        <span class="input-group-text"><i class="far fa-eye-slash" id="togglePassword" style="cursor: pointer"></i></span>
+                    </div>
+                    {{ form.password2.errors }}
+                </div>
+                 <div class="form-group">
+                     {{ form.non_field_errors }}
+                 </div>
 
-
-         <div class="row align-items-center justify-content-center">
-            <div class="col d-flex justify-content-center">
-                <small class="text-muted">
-                    Have an account? <a class="ml-2" href="{% url 'accounts:login' %}">Login</a>
-                </small>
-            </div>
-        </div>
+                <div class="form-group">
+                    <button id="my-btn" class="btn form-control" type="submit">Register</button>
+                </div>
+                 <div class="row align-items-center justify-content-center">
+                    <div class="col d-flex justify-content-center">
+                        <small class="text-muted">
+                            Have an account? <a class="ml-2" href="{% url 'accounts:login' %}">Login</a>
+                        </small>
+                    </div>
+                </div>
+            </form>
+         </div>
     </div>
+
+
+
 {% endblock %}

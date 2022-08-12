@@ -118,14 +118,70 @@ function favouriteFunction() {
     });
 }
 
+function commentAction() {
+    console.log("I am comment Action")
+    let comments = document.querySelectorAll(".comment");
+    console.log(comments);
+
+    comments.forEach((comment) => {
+        let commentEditBtn = comment.querySelector(".comment-edit-button");
+        let commentDeleteBtn = comment.querySelector(".comment-delete-button");
+        let comment_id = comment.dataset.id;
+        let commentTextBox = comment.querySelector(".comment-text-box")
+        let commentUpdateBtn = comment.querySelector("#comment-update-btn")
+
+        commentDeleteBtn.addEventListener('click', (element) => {
+            console.log("Delete Button!")
+             fetch(`/songs/comments/${comment_id}`, {
+                  method: 'DELETE',
+                  body: JSON.stringify({})
+             })
+             .then(response => response.json())
+             .then(data => {
+                comment.remove();
+             })
+        });
+
+        commentEditBtn.addEventListener('click', (element) => {
+            console.log("Edit Button!")
+            commentTextBox.setAttribute("contenteditable", "");
+            commentTextBox.focus();
+            commentEditBtn.style.display = 'none';
+            commentDeleteBtn.style.display = 'none';
+            commentUpdateBtn.style.display = 'block';
+
+        });
+
+        commentUpdateBtn.addEventListener('click', (element) => {
+            console.log("Update Button!")
+             fetch(`/songs/comments/${comment_id}/`, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                    comment_text: commentTextBox.innerText
+                  })
+             })
+             .then(response => response.json())
+             .then(data => {
+                commentEditBtn.style.display = 'block';
+                commentDeleteBtn.style.display = 'block';
+                commentUpdateBtn.style.display = 'none';
+                commentTextBox.removeAttribute("contenteditable");
+             })
+        });
+
+    });
+
+}
 
 
 
-function commentFunction() {
+
+function commentCreateFunction() {
     let commentList = document.querySelector("#comment-list");
     let commentBtn = document.querySelector("#comment-btn");
-    let commentBox = document.querySelector(".textarea");
+    let commentBox = document.querySelector("#comment-box");
     console.log(commentBtn);
+    console.log(commentBox.innerText);
 
     commentBtn.addEventListener('click', () => {
         console.log("Clicked");
@@ -136,24 +192,25 @@ function commentFunction() {
         fetch(`/songs/${song_id}/action/`, {
               method: 'POST',
               body: JSON.stringify({
-                  text: commentBox.value,
+                  text: commentBox.innerHTML,
               })
         })
         .then(response => response.json())
         .then(result => {
-            commentBox.value = '';
+            commentBox.innerHTML = '';
             console.log("Success");
             console.log(result);
             let comment = document.createElement("div");
             comment.classList.add("comment-box");
             comment.innerHTML = `
+            <div class="comment" data-id=${result["id"]}>
                 <div class="comment-box row align-items-center">
                     <div class="col col-1">
                         <img class="profile-thumbnail" src=${result["image"]} alt="image">
                     </div>
                     <div class="col col-11">
-                        <a href=${result["profile_link"]} class="comment-author">${result["owner"]}</a>
-                        <p class="comment-date">${result["created_on"]}</p>
+                        <a href=${result["profile_url"]} class="comment-author">${result["owner"]}</a>
+                        <p class="comment-date"  style="margin-top: 0px;margin-bottom: 0px">${result["created_on"]}</p>
                     </div>
                 </div>
                 <div class="row align-items-center justify-content-end">
@@ -161,7 +218,23 @@ function commentFunction() {
                           ${result["text"]}
                       </div>
                 </div>
+                <div class="row mt-2 comment-action">
+                   <div class="col-auto ms-auto">
+                       <button class="comment-edit-button">
+                            <i class="fas fa-edit"></i>
+                       </button>
+                   </div>
+                   <div class="col-auto">
+                       <button class="comment-delete-button">
+                            <i class="fa fa-trash"></i>
+                       </button>
+                   </div>
+                    <div class="col-auto">
+                       <button id="comment-update-btn" class="btn" type="button">Save</button>
+                   </div>
+                </div>
                 <br>
+            <div>
             `
 
             let index=0;
@@ -172,14 +245,29 @@ function commentFunction() {
                 commentList.insertBefore(comment, commentList.children[index]);
             }
 
-        });
+            if (result["is_authentic_owner"]) {
+                let blueMark = document.createElement("i");
+                blueMark.classList.add('fas', 'fa-check-circle', 'me-1');
+                console.log("Blue Mark");
+                commentAuthor = document.querySelector(".comment-author");
+                commentAuthor.parentNode.insertBefore(blueMark, commentAuthor);
+
+            }
+
+
+
+        })
+        .then(() => {
+            commentAction();
+        })
     });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     songPlayFunction();
     favouriteFunction();
-    commentFunction();
+    commentCreateFunction();
+    commentAction();
 
 });
 
