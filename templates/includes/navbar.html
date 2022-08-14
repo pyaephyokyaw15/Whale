@@ -1,4 +1,5 @@
 {% load static %}
+
 <nav class="navbar navbar-expand-lg p-0 navbar-dark sticky-top" style="background-color: #3c99e5">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'songs:songs' %}"><img class='logo' src="{% static 'images/whale.png' %}"  alt="">Whale</a>
@@ -38,8 +39,6 @@
                     </div>
                 </li>
             </ul>
-
-
 
             <ul class="navbar-nav mb-2 m-lg-0">
                 <form action="{% url 'songs:songs' %}" role="search">

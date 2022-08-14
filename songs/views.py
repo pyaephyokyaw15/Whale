@@ -1,17 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Song, Genre, Mood, Comment
+from .models import Song, Comment
 from django.urls import reverse
 from django.db.models import Q
-from .forms import CommentForm, UploadForm
+from .forms import CommentForm, SongUploadForm
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
 import json
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseNotFound
 
+domain = 'http://127.0.0.1:8000/'  # change your domain
 
 
 # Create your views here.
@@ -19,7 +18,8 @@ class SongListView(ListView):
     model = Song
     template_name = 'songs/songs.html'
     context_object_name = 'songs'
-
+    query_string = ''  # sustain the current query_string for further use.
+    # e.g. determining the next and previous songs according to the search_query.
 
     def get_queryset(self):
         mood_query = self.request.GET.get('mood')
@@ -28,10 +28,10 @@ class SongListView(ListView):
         following_query = self.request.GET.get('following')
         q = self.request.GET.get('q')
 
+        # query-string filter
         if mood_query:
             self.query_string = f"mood={mood_query}"
             return Song.objects.filter(mood__slug=mood_query)
-
 
         elif genre_query:
             self.query_string = f"genre={genre_query}"
@@ -51,6 +51,7 @@ class SongListView(ListView):
             else:
                 return None
 
+        # search song(search through title and song-owner)
         elif q:
             self.query_string = ''
             return Song.objects.filter(Q(title__icontains=q) | Q(owner__username__icontains=q))
@@ -59,56 +60,44 @@ class SongListView(ListView):
             self.query_string = ''
             return Song.objects.all()
 
+    # add more elements into the existing context_data when it is sent to the template
     def get_context_data(self, **kwargs):
         context = super(SongListView, self).get_context_data(**kwargs)
         context['query_string'] = self.query_string
         return context
 
 
-
-
-
-
-class FavouriteSongListView(LoginRequiredMixin, ListView):
-    model = Song
-    template_name = 'songs/songs.html'
-    context_object_name = 'songs'
-
-
-    def get_queryset(self):
-        return Song.objects.filter(favourite_by=self.request.user)
-
-
-
-
-
-class SongUploadView(LoginRequiredMixin,CreateView):
+class SongUploadView(LoginRequiredMixin, CreateView):
     model = Song
     template_name = 'songs/upload.html'
-    form_class = UploadForm
+    form_class = SongUploadForm
 
     def form_valid(self, form):
+        # assign the song_owner to current user
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
-class SongEditView(LoginRequiredMixin,UpdateView):
+class SongEditView(LoginRequiredMixin, UpdateView):
     model = Song
     template_name = 'songs/edit-song.html'
-    form_class = UploadForm
+    form_class = SongUploadForm
 
     def form_valid(self, form):
+        # assign the song_owner to current user
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self):
         view_name = 'songs:song_detail'
-        # No need for reverse_lazy here, because it's called inside the method
         return reverse(view_name, kwargs={'pk': self.object.pk})
 
-class SongDeleteView(LoginRequiredMixin,DeleteView):
+
+class SongDeleteView(LoginRequiredMixin, DeleteView):
     model = Song
+
     def get_success_url(self):
+        # retrieve data from the session_store
         current_song_id = self.request.session['current_song_id']
         next_song_id = self.request.session['next_song_id']
         query_string = self.request.session['query_string']
@@ -121,10 +110,9 @@ class SongDeleteView(LoginRequiredMixin,DeleteView):
         # if next_song exists, go to next_song
         # else, go to the song_list according to query_string
         if next_song_exist:
-            return 'http://127.0.0.1:8000/songs/{}/?{}'.format(next_song_id, query_string)
-
+            return domain + 'songs/{}/?{}'.format(next_song_id, query_string)
         else:
-            return 'http://127.0.0.1:8000/songs/?{}'.format(query_string)
+            return domain + 'songs/?{}'.format(query_string)
 
 
 def song_detail(request, pk):
@@ -138,6 +126,7 @@ def song_detail(request, pk):
     favourite_query = request.GET.get('favourite')
     following_query = request.GET.get('following')
 
+    #  determine next song according to the query_string
     if mood_query:
         next_song = Song.objects.filter(mood__slug=mood_query, pk__lt=pk).first()
         if not next_song:
@@ -172,7 +161,6 @@ def song_detail(request, pk):
         query_string = f"favourite=True"
 
     elif following_query:
-        print("THis is following query")
         next_song = Song.objects.filter(owner__in=request.user.following.all(), pk__lt=pk).first()
         if not next_song:
             next_song = Song.objects.filter(owner__in=request.user.following.all()).first()
@@ -194,13 +182,13 @@ def song_detail(request, pk):
 
         query_string = ''
 
-    comments = Comment.objects.filter(song=song)
-    comment_form = CommentForm()
-
     # store values in session for further use
     request.session['next_song_id'] = next_song.id
     request.session['current_song_id'] = pk
     request.session['query_string'] = query_string
+
+    comments = Comment.objects.filter(song=song)
+    comment_form = CommentForm()  # form for create-comment
 
     context = {
         "song": song,
@@ -211,21 +199,21 @@ def song_detail(request, pk):
         "query_string": query_string
     }
 
-
     return render(request, 'songs/song_detail.html', context=context)
 
 
-@csrf_exempt
 def song_detail_action(request, pk):
     if not request.user.is_authenticated:
-        return JsonResponse({'status':'false', 'message': 'User is not authenticated'}, status=403)
+        # If user is not login, redirect to login-screen
+        return JsonResponse({"status": "false", 'message': 'User is not authenticated'}, status=403)
 
     try:
         song = Song.objects.get(pk=pk)
     except Song.DoesNotExist:
-        return HttpResponseNotFound("User does not exist")
+        return HttpResponseNotFound("Song does not exist")
 
     if request.method == "POST":
+        # create comment
         data = json.loads(request.body)
         comment_form = CommentForm(data)
         if comment_form.is_valid():
@@ -237,6 +225,7 @@ def song_detail_action(request, pk):
             return JsonResponse(temp.serialize())
 
     if request.method == "PUT":
+        # favourite-unfavourite action
         data = json.loads(request.body)
         print(data)
         if data.get("favourite"):
@@ -246,52 +235,35 @@ def song_detail_action(request, pk):
             else:
                 song.favourite_by.add(request.user)
                 favourite = True
-
         song.save()
 
         response = {
             "favourite": favourite
         }
-
-        print("Hay It is OK")
         return JsonResponse(response)
 
-@csrf_exempt
+
 def comment_action(request, pk):
+    # delete comment
     if request.method == "DELETE":
         comment = Comment.objects.get(pk=pk)
         comment.delete()
 
         response = {
-            "delete": "OK"
+            "status": "OK"
         }
-
-        print("Hay It is OK")
         return JsonResponse(response)
 
-
+    # edit comment
     if request.method == "PUT":
         data = json.loads(request.body)
-        print(data)
+        # print(data)
         comment_text = data.get('comment_text')
         comment = Comment.objects.get(pk=pk)
         comment.text = comment_text
         comment.save()
 
         response = {
-            "update": "OK"
+            "status": "OK"
         }
-
-        print("Hay It is OK")
         return JsonResponse(response)
-
-
-
-
-
-
-
-
-
-
-

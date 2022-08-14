@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from songs.models import Song
-from django.conf import settings
 from .forms import UserRegisterForm, ProfileForm
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseNotFound
 from accounts.models import User
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.edit import UpdateView
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 def register(request):
@@ -26,25 +26,8 @@ def register(request):
     return render(request, 'accounts/register.html', context)
 
 
-class ProfileUpdateView(UpdateView):
-    # specify the model you want to use
-    model = User
-
-    # specify the fields
-    fields = [
-        "first_name",
-        "last_name",
-        "profile_picture"
-    ]
-
-    # can specify success url
-    # url to redirect after successfully
-    # updating details
-    template_name = 'accounts/setting.html'
-
-
+@login_required()
 def setting(request):
-
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         print(form.errors)
@@ -61,7 +44,6 @@ def setting(request):
     return render(request, 'accounts/setting.html', context)
 
 
-@csrf_exempt
 def profile(request, username):
     current_user = request.user
     if request.method == "GET":
@@ -79,6 +61,7 @@ def profile(request, username):
         print(profile_user)
         follow_button_visibility = current_user != profile_user
 
+        # follow-unfollow state
         if current_user in profile_user.followers.all():
             status = "Unfollow"
         else:
@@ -95,7 +78,7 @@ def profile(request, username):
         }
         return render(request, 'accounts/profile.html', context=context)
 
-
+    # follow-unfollow action
     elif request.method == "PUT":
         try:
             profile_user = User.objects.get(username=username)
@@ -122,9 +105,6 @@ def profile(request, username):
             "followingStatus": status,
             'following_counts': profile_user.following.count(),
             'follower_counts': profile_user.followers.count(),
-
         }
 
-        print("Hay It is OK")
-        print(response)
         return JsonResponse(response)

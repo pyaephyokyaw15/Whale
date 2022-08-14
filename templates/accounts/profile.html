@@ -33,9 +33,6 @@
                     </div>
                 </div>
 
-
-
-
                 <div class="row">
                     {% if follow_button_visibility %}
                         <div class="col">
@@ -44,7 +41,6 @@
                     {% endif %}
                 </div>
             </div>
-
         </div>
 
 
@@ -55,7 +51,6 @@
             <li class="nav-item">
                 <a id="favourite-btn" class="nav-link" href="#">Favourite</a>
             </li>
-
         </ul>
 
         <table id="uploaded-songs" class="table  table-hover ">
@@ -80,17 +75,17 @@
                         </td>
 
 
-
-                        {% if song in user.favourite_songs.all %}
-                           <td class='align-middle' style="width: 10%">
-                               <span><i class="favourite fa fa-heart"></i></span>
-                           </td>
-                        {% else %}
-                           <td class='align-middle' style="width: 10%">
-                               <span><i class="unfavourite fa fa-heart"></i></span>
-                          </td>
-                        {% endif %}
-
+                        {% with favourite_songs=user.favourite_songs.all %}
+                            {% if song in favourite_songs %}
+                            <td class='align-middle' style="width: 10%">
+                                <span><i class="favourite fa fa-heart"></i></span>
+                            </td>
+                            {% else %}
+                            <td class='align-middle' style="width: 10%">
+                                <span><i class="unfavourite fa fa-heart"></i></span>
+                            </td>
+                            {% endif %}
+                        {% endwith %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -101,6 +96,7 @@
 
                 {% for song in favourite_songs %}
                     <tr class="song-wrapper" data-id="{{ song.id }}">
+                        
                         <td class='align-middle text-center' style="width: 10%">
                             <img src="{{ song.banner.url }}" alt="logo" class="song-thumbnail">
                         </td>
@@ -114,31 +110,28 @@
                             <a href="{% url 'songs:song_detail'  song.id  %}"><i class="far fa-play-circle fa-lg"></i></a>
                         </td>
 
-
-
-                        {% if song in user.favourite_songs.all %}
-                           <td class='align-middle' style="width: 10%">
-                               <span><i class="favourite far fa-heart"></i></span>
-                           </td>
-                        {% else %}
-                           <td class='align-middle' style="width: 10%">
-                               <span><i class="far fa-heart"></i></span>
-                          </td>
-                        {% endif %}
+                        {% with favourite_songs=user.favourite_songs.all %}
+                            {% if song in user.favourite_songs.all %}
+                            <td class='align-middle' style="width: 10%">
+                                <span><i class="favourite far fa-heart"></i></span>
+                            </td>
+                            {% else %}
+                            <td class='align-middle' style="width: 10%">
+                                <span><i class="far fa-heart"></i></span>
+                            </td>
+                            {% endif %}
+                        {% endwith %}
 
                     </tr>
                 {% endfor %}
-
 
             </tbody>
         </table>
     </div>
 
-
-
-
 {% endblock %}
 
+<!-- js files-->
 {% block js_files %}
     {{ block.super }}
     <script src="{% static 'js/profile.js' %}"></script>

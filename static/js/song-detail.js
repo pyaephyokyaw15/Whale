@@ -6,14 +6,12 @@ function songPlayFunction() {
     let progressArea = document.querySelector(".song-progress-area");
     let progressBar = document.querySelector(".song-progress-bar");
 
-
     // play music function
     function playMusic() {
         playPauseBtn.classList.add("paused");
         playPauseBtn.querySelector("i").innerText = "pause";
         mainAudio.play();
     }
-
 
     //pause music function
     function pauseMusic() {
@@ -23,14 +21,11 @@ function songPlayFunction() {
     }
 
     playPauseBtn.addEventListener("click", ()=>{
-
         const isMusicPlay = playPauseBtn.classList.contains("paused");
         console.log(isMusicPlay);
 
         //if isPlayMusic is true then call pauseMusic else call playMusic
         isMusicPlay ? pauseMusic() : playMusic();
-
-
     });
 
     // update progress bar width according to music current time
@@ -39,7 +34,6 @@ function songPlayFunction() {
         const duration = e.target.duration; //getting playing song total duration
         let progressWidth = (currentTime / duration) * 100;
         progressBar.style.width = `${progressWidth}%`;
-
 
         let musicCurrentTime = document.querySelector(".current-time"),
         musicDuartion = document.querySelector(".max-duration");
@@ -78,17 +72,21 @@ function songPlayFunction() {
         playMusic();
         console.log(mainAudio.currentTime);
     });
-
 }
 
 
 function favouriteFunction() {
-
     let favouriteBtn = document.querySelector(".fa-heart");
 
-    favouriteBtn.addEventListener("click", () => {
+    const csrftoken = getCookie('csrftoken');
+    const request = new Request(
+        `/songs/${song_id}/action/`,
+        {headers: {'X-CSRFToken': csrftoken}}
+    );
 
-        fetch(`/songs/${song_id}/action/`, {
+    // toggle favourite-unfavourite
+    favouriteBtn.addEventListener("click", () => {
+        fetch(request, {
               method: 'PUT',
               body: JSON.stringify({
                   favourite: 'toggle',
@@ -98,10 +96,10 @@ function favouriteFunction() {
         .then(data => {
             console.log(data);
             if (data.status == "false") {
-                console.log("Error");
-                window.open(`http://127.0.0.1:8000/account/login/?next=${window.location.toString()}`,"_self")
+                console.log("Not login");
+                // if not login, redirect to login-page
+                window.open(loginRedirect, "_self")
             }
-
             else {
                 if (favouriteBtn.classList.contains("favourite")) {
                     favouriteBtn.classList.remove("favourite");
@@ -110,18 +108,18 @@ function favouriteFunction() {
                     favouriteBtn.classList.add("favourite");
                     favouriteBtn.classList.remove("unfavourite");
                 }
-
-
             }
-
         });
     });
 }
 
+
 function commentAction() {
-    console.log("I am comment Action")
     let comments = document.querySelectorAll(".comment");
     console.log(comments);
+
+    const csrftoken = getCookie('csrftoken');
+
 
     comments.forEach((comment) => {
         let commentEditBtn = comment.querySelector(".comment-edit-button");
@@ -130,18 +128,27 @@ function commentAction() {
         let commentTextBox = comment.querySelector(".comment-text-box")
         let commentUpdateBtn = comment.querySelector("#comment-update-btn")
 
+        const request = new Request(
+            `/songs/comments/${comment_id}/`,
+            {headers: {'X-CSRFToken': csrftoken}}
+        );
+
+        // Delete Comment
         commentDeleteBtn.addEventListener('click', (element) => {
-            console.log("Delete Button!")
-             fetch(`/songs/comments/${comment_id}`, {
-                  method: 'DELETE',
-                  body: JSON.stringify({})
-             })
-             .then(response => response.json())
-             .then(data => {
-                comment.remove();
-             })
+            // console.log("Delete Button!")
+
+
+            fetch(request, {
+                method: 'DELETE',
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+            comment.remove();
+            })
         });
 
+        // Edit Comment
         commentEditBtn.addEventListener('click', (element) => {
             console.log("Edit Button!")
             commentTextBox.setAttribute("contenteditable", "");
@@ -152,27 +159,27 @@ function commentAction() {
 
         });
 
+
+        // Save the edited comment
         commentUpdateBtn.addEventListener('click', (element) => {
             console.log("Update Button!")
-             fetch(`/songs/comments/${comment_id}/`, {
-                  method: 'PUT',
-                  body: JSON.stringify({
-                    comment_text: commentTextBox.innerText
-                  })
-             })
-             .then(response => response.json())
-             .then(data => {
-                commentEditBtn.style.display = 'block';
-                commentDeleteBtn.style.display = 'block';
-                commentUpdateBtn.style.display = 'none';
-                commentTextBox.removeAttribute("contenteditable");
-             })
+
+            fetch(request, {
+                method: 'PUT',
+                body: JSON.stringify({
+                comment_text: commentTextBox.innerText
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+            commentEditBtn.style.display = 'block';
+            commentDeleteBtn.style.display = 'block';
+            commentUpdateBtn.style.display = 'none';
+            commentTextBox.removeAttribute("contenteditable");
+            })
         });
-
     });
-
 }
-
 
 
 
@@ -180,16 +187,17 @@ function commentCreateFunction() {
     let commentList = document.querySelector("#comment-list");
     let commentBtn = document.querySelector("#comment-btn");
     let commentBox = document.querySelector("#comment-box");
-    console.log(commentBtn);
-    console.log(commentBox.innerText);
+    // console.log(commentBtn);
+    // console.log(commentBox.innerText);
+
+    const csrftoken = getCookie('csrftoken');
+    const request = new Request(
+        `/songs/${song_id}/action/`,
+        {headers: {'X-CSRFToken': csrftoken}}
+    );
 
     commentBtn.addEventListener('click', () => {
-        console.log("Clicked");
-
-
-
-
-        fetch(`/songs/${song_id}/action/`, {
+        fetch(request, {
               method: 'POST',
               body: JSON.stringify({
                   text: commentBox.innerHTML,
@@ -198,8 +206,8 @@ function commentCreateFunction() {
         .then(response => response.json())
         .then(result => {
             commentBox.innerHTML = '';
-            console.log("Success");
-            console.log(result);
+            // console.log("Success");
+            // console.log(result);
             let comment = document.createElement("div");
             comment.classList.add("comment-box");
             comment.innerHTML = `
@@ -237,6 +245,7 @@ function commentCreateFunction() {
             <div>
             `
 
+            // append new comment on the top of other comments
             let index=0;
             commentList.appendChild(comment);
             if (index >= commentList.children.length) {
@@ -245,19 +254,17 @@ function commentCreateFunction() {
                 commentList.insertBefore(comment, commentList.children[index]);
             }
 
+            // add blue-mark for authentic user
             if (result["is_authentic_owner"]) {
                 let blueMark = document.createElement("i");
                 blueMark.classList.add('fas', 'fa-check-circle', 'me-1');
                 console.log("Blue Mark");
                 commentAuthor = document.querySelector(".comment-author");
                 commentAuthor.parentNode.insertBefore(blueMark, commentAuthor);
-
             }
-
-
-
         })
         .then(() => {
+            // recall commentAction function to add event listener for new comment
             commentAction();
         })
     });
@@ -268,6 +275,21 @@ document.addEventListener('DOMContentLoaded', function() {
     favouriteFunction();
     commentCreateFunction();
     commentAction();
-
 });
 
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

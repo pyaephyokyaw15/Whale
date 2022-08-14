@@ -21,8 +21,6 @@ class Mood(models.Model):
         return f"{reverse('songs:songs')}?mood={self.slug}"
 
 
-
-
 class Genre(models.Model):
     name = models.CharField(max_length=50)
     # banner = models.ImageField(default='images/genre_banners/default.png', upload_to='images/genre_banners/')
@@ -48,6 +46,12 @@ class Song(models.Model):
     class Meta:
         ordering = ['-upload_time']
 
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('songs:songs')
+
     @property
     def favourite_count(self):
         return self.favourite_by.count()
@@ -55,12 +59,6 @@ class Song(models.Model):
     @property
     def comment_count(self):
         return self.comments.count()
-
-    def __str__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse('songs:songs')
 
 
 class Comment(models.Model):
@@ -75,21 +73,19 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.song}:{self.owner}'
 
+    def serialize(self):  # call from other modules
+        created_on = dateformat.DateFormat(self.created_on).format('M. j, Y,  P')
+        profile_url = reverse("accounts:profile", kwargs={"username": self.owner.username})
 
-
-    def serialize(self):
-
-        date_time_format = dateformat.DateFormat(self.created_on).format('M. j, Y,  P')
         return {
             "id": self.id,
             "text": self.text,
             "owner": self.owner.username,
             "is_authentic_owner": self.owner.authentic,
             "image": self.owner.profile_picture.url,
-            "profile_url": reverse("accounts:profile", kwargs={"username": self.owner.username}),
+            "profile_url": profile_url,
             "song": self.song.title,
-            "created_on": date_time_format,
-
+            "created_on": created_on,
         }
 
 

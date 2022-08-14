@@ -1,11 +1,10 @@
 {% extends 'layout.html' %}
-{% load crispy_forms_tags %}
+
 
 {% block main %}
     <div class="container-lg">
          <div id="form-wrapper" class="row align-items-center justify-content-center">
             <form id="my-form" method="POST" class="col-md-5 col-xl-4">
-                <!-- csrf prevents from attackers. If we don;t include, it will not run. -->
                 {% csrf_token %}
 
                 <div class="form-group">

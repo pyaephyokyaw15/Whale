@@ -1,11 +1,9 @@
 {% extends 'layout.html' %}
-{% load crispy_forms_tags %}
 {% load static %}
 
 {% block main %}
     <div class="container-lg song-detail-wrapper" data-id="{{ song.id }}">
         <div class="row align-items-center justify-content-center my-4">
-
 
             <div class="col col-md-3 d-flex justify-content-center">
                 <img id="profile-large" src="{{ song.banner.url }}" alt="image">
@@ -15,7 +13,6 @@
                 <div class="row">
                     <div class="col">
                         <h5>{{ song.title }}</h5>
-
                     </div>
                 </div>
                 <div class="row">
@@ -23,24 +20,23 @@
                         {% if song.owner.authentic %}
                                 <i class="fas fa-check-circle"></i>
                         {% endif %}
+
                         <a href="{% url 'accounts:profile'  song.owner.username  %}">{{ song.owner }}</a>
 
                         {% if song.owner == request.user %}
                             <div class="mt-3">
-                                    <form method="POST" action="{% url 'songs:delete' song.id %}">
-                                        {% csrf_token %}
-                                        <a href="{% url 'songs:edit' song.id %}" class="me-5"><i class="fas fa-edit"></i></a>
-                                        <button type="submit" class="my-delete-button">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
+                                <form method="POST" action="{% url 'songs:delete' song.id %}">
+                                    {% csrf_token %}
+                                    <a href="{% url 'songs:edit' song.id %}" class="me-5"><i class="fas fa-edit"></i></a>
+                                    <button type="submit" class="my-delete-button">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
                             </div>
                         {% endif %}
-
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="row align-items-center justify-content-center my-3">
@@ -54,7 +50,6 @@
         </div>
 
         <div class="row align-items-center justify-content-center my-3">
-
             <div class="col col-md-5 d-flex justify-content-center">
                 <div class="song-timer d-flex justify-content-between">
                     <span class="current-time">0:00</span>
@@ -70,11 +65,14 @@
                     <i id="play-pause" class="material-icons" >pause</i>
                 </div>
                 <i onclick='next()' id="next" class="material-icons">skip_next</i>
-                 {% if song in user.favourite_songs.all %}
-                       <i class="favourite fa fa-heart"></i>
-                 {% else %}
-                       <i class="unfavourite fa fa-heart"></i>
-                {% endif %}
+
+                {% with favouirte_songs=user.favourite_songs.all %} 
+                    {% if song in favouirte_songs %}
+                        <i class="favourite fa fa-heart"></i>
+                    {% else %}
+                        <i class="unfavourite fa fa-heart"></i>
+                    {% endif %}
+                {% endwith %}
             </div>
         </div>
 
@@ -93,7 +91,6 @@
                         </div>
                     </form>
 
-
                 {% else %}
                     <p>Please <a href="{% url 'accounts:login' %}">login</a> to comment.</p>
                 {% endif %}
@@ -102,7 +99,7 @@
 
         <div class="row align-items-center justify-content-center my-3">
             <div id="comment-list" class="col col-12 col-md-6">
-                 {% for comment in comments %}
+                {% for comment in comments %}
                     <div class="comment" data-id="{{ comment.id }}">
                         <div class="comment-box row align-items-center">
                               <div class="col col-1">
@@ -124,55 +121,56 @@
                         </div>
                         {% if comment.owner == request.user %}
                             <div class="row mt-2 comment-action">
-                               <div class="col-auto ms-auto">
-                                   <button class="comment-edit-button">
+                                <div class="col-auto ms-auto">
+                                    <button class="comment-edit-button">
                                         <i class="fas fa-edit"></i>
-                                   </button>
-                               </div>
-                               <div class="col-auto">
-                                   <button class="comment-delete-button">
-                                        <i class="fa fa-trash"></i>
-                                   </button>
-                               </div>
+                                    </button>
+                                </div>
                                 <div class="col-auto">
-                                   <button id="comment-update-btn" class="btn" type="button">Save</button>
-                               </div>
+                                    <button class="comment-delete-button">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="col-auto">
+                                    <button id="comment-update-btn" class="btn" type="button">Save</button>
+                                </div>
                             </div>
                         {% endif %}
                         <br>
                     </div>
 
                 {% empty %}
-                      No comments yet!
+                    No comments yet!
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
     <script>
-        mainAudio = document.querySelector("#main-audio");
+        let mainAudio = document.querySelector("#main-audio");
+
+        let domain = 'http://127.0.0.1:8000/';  // change your domain
+
         mainAudio.addEventListener("ended", ()=>{
-            console.log('End');
+            // console.log('End');
             next();
         });
 
         function next(){
             console.log('Next');
-            console.log({{ next_song.id }})
-            window.open('http://127.0.0.1:8000/songs/{{ next_song.id }}/?{{ query_string }}',"_self")
+            // console.log({{ next_song.id }})
+            window.open(domain + 'songs/{{ next_song.id }}/?{{ query_string }}', "_self")
         }
-         function previous(){
+
+        function previous(){
             console.log('Previous');
-            window.open('http://127.0.0.1:8000/songs/{{ previous_song.id }}/?{{ query_string }}',"_self")
+            window.open(domain + 'songs/{{ previous_song.id }}/?{{ query_string }}', "_self")
         }
-
     </script>
-
-
 {% endblock %}
 
+
+<!-- js files -->
 {% block js_files %}
     {{ block.super }}
     <script src="{% static 'js/song-detail.js' %}"></script>

@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# reads key-value pairs from a .env file and can set them as environment variables.
+# reads key-value pairs(environment variables) from .env file and can set them as environment variables.
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,8 +46,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
 
     # third-party
-    'crispy_forms',
-
+    # 'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +86,10 @@ WSGI_APPLICATION = 'whale.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
+# For those who cloned this repo, I left sqlite as the database in this repo for quick start.
+# You can define any database you like
+# I use PostgreSQL on production.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -137,19 +139,20 @@ STATICFILES_DIRS = [
 ]
 
 
-# Media fiels
+# Media files
 MEDIA_ROOT = BASE_DIR /'media'
 MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = '/songs'
 LOGIN_URL = '/account/login/'
-# LOGOUT_REDIRECT_URL = 'account/login/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# AWS S3 Bucket configuration to upload songs and photos
 # DEFAULT_FILE_STORAGE = os.getenv("DEFAULT_FILE_STORAGE")
 # AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 # AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
