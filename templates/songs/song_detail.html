@@ -27,7 +27,7 @@
                             <div class="mt-3">
                                 <form method="POST" action="{% url 'songs:delete' song.id %}">
                                     {% csrf_token %}
-                                    <a href="{% url 'songs:edit' song.id %}" class="me-5"><i class="fas fa-edit"></i></a>
+                                    <a href="{% url 'songs:edit' song.id %}" class="me-5"><i class="fas fa-edit my-edit-button"></i></a>
                                     <button type="submit" class="my-delete-button">
                                         <i class="fa fa-trash"></i>
                                     </button>

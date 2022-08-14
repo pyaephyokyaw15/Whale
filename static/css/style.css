@@ -175,4 +175,6 @@ legend {
 .my-delete-button, .my-edit-button, .comment-delete-button, .comment-edit-button {
     background: transparent;
     border: none;
+    color: #3c99e5;
 }
+

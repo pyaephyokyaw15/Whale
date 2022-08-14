@@ -12,7 +12,9 @@ function followFunction() {
         {headers: {'X-CSRFToken': csrftoken}}
     );
 
-    followBtn.addEventListener('click', () => {
+    // when user view his own profile, followBtn is hidden.
+    if (followBtn) {
+        followBtn.addEventListener('click', () => {
         fetch(request, {
               method: 'PUT',
               body: JSON.stringify({
@@ -26,6 +28,9 @@ function followFunction() {
             followerCounts.innerHTML = data["follower_counts"];
         });
     });
+
+    }
+
 }
 
 

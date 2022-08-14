@@ -132,11 +132,12 @@ function favourite_action(song) {
 
 // password hide-unhide feature(login/register form)
 document.addEventListener('DOMContentLoaded', function() {
-    let togglePasswordBtn = document.querySelector("#togglePassword");
-    let passwordField = document.querySelector("#id_password");
-    // console.log(togglePassword);
+    let passwordWrappers = document.querySelectorAll('.password-wrapper');
 
-    if (togglePasswordBtn) {
+    passwordWrappers.forEach((passwordWrapper) => {
+        let togglePasswordBtn = passwordWrapper.querySelector("#togglePassword");
+        let passwordField = passwordWrapper.querySelector(".password-field");
+
         togglePasswordBtn.addEventListener('click', (element) => {
             let inputType = passwordField.getAttribute("type")
             if (inputType == "password") {
@@ -149,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 togglePasswordBtn.classList.add("fa-eye-slash");
             }
         });
-    }
+    });
 });
 
 function getCookie(name) {
