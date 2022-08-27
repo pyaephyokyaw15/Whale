@@ -1,9 +1,7 @@
 # Whale
-Whale is a "Music Streaming" website developed with Django and Ajax.
+Whale is a "Music Streaming" website developed with Django and Ajax. Users can share music with others.
 
 ## Overview
-Users can share music with others.
-
 The main features that have currently been implemented are:
 
 * Listen songs (no need to login)
