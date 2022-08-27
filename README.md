@@ -47,7 +47,7 @@ To get this project up and running locally on your computer:
    > **Note:** I want to recommend using a Python virtual environment.
    
 1. Create .env file in the project root directory and create variables used in settings.py.
-   > **Note:** >  os.getenv() in settings.py
+
 1. Assuming you have Python setup, run the following commands (if you're on Windows you may use `py` or `py -3` instead of `python` to start Python):
    ```
    pip3 install -r requirements.txt
