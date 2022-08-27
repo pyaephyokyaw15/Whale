@@ -1,5 +1,5 @@
 # Whale
-Whale is a "Music Streaming" website developed with Django.
+Whale is a "Music Streaming" website developed with Django and Ajax.
 
 ## Overview
 Users can share music with others.
@@ -15,14 +15,36 @@ The main features that have currently been implemented are:
 * Authentication and authorization
 * User Profile
 * Follow / Unfollow
+* Search songs
+* Responsive design
+
+## Tech Stack
+
+**Frontend** - Vanilla Javascript, Ajax   
+**Styling** - Bootstrap CSS   
+**Backend** - Django    
+**Database** - Postgres  
+**Hosting** - AWS EC2   
+**Containerization:** Docker  
+
+## Demo
+Due to server costs, I am sorry that I could not release this site public. I am only sharing with my close friends.  
+Here is the demo GIF.
 
 ## Entity–relationship Diagram
-![Entity–relationship model](https://github.com/pyaephyokyaw15/Whale/blob/main/ERD.png)
 > **Note:** Click and download the image to see details.
+![Entity–relationship model](https://github.com/pyaephyokyaw15/Whale/blob/main/ERD.png)
+
 
 ## Quick Start
 
 To get this project up and running locally on your computer:
+
+1. Clone the project.
+
+   ```bash
+   git clone https://github.com/pyaephyokyaw15/Whale.git
+   ```
 1. Set up the Python development environment.
    > **Note:** I want to recommend using a Python virtual environment.
    
@@ -38,6 +60,15 @@ To get this project up and running locally on your computer:
    python3 manage.py createsuperuser # Create a superuser
    python3 manage.py runserver
    ```
-1. Open a browser to `http://127.0.0.1:8000.
+1. Open a browser to `http://127.0.0.1:8000.`
  
-1. Admin Site: `http://127.0.0.1:8000/admin` 
+1. Admin Site: `http://127.0.0.1:8000/admin`
+
+## References
+
+* [Django Documentation](https://docs.djangoproject.com/en/4.1/)
+* [mdn web docs](https://developer.mozilla.org/en-US/docs/Learn)
+
+## Author
+
+- [@pyaephyokyaw15](https://github.com/pyaephyokyaw15/)
