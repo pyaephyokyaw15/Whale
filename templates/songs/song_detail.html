@@ -12,7 +12,7 @@
             <div class="col col-md-4">
                 <div class="row">
                     <div class="col">
-                        <h5>{{ song.title }}</h5>
+                        <h5 class="title">{{ song.title }}</h5>
                     </div>
                 </div>
                 <div class="row">
@@ -78,7 +78,7 @@
 
         <div class="row align-items-center justify-content-center mt-5">
             <div class="col col-12 col-md-6">
-                <h5>Comments</h5>
+                <h5 class="title">Comments</h5>
 
                 {% if user.is_authenticated %}
 
@@ -101,17 +101,17 @@
             <div id="comment-list" class="col col-12 col-md-6">
                 {% for comment in comments %}
                     <div class="comment" data-id="{{ comment.id }}">
-                        <div class="comment-box row align-items-center">
-                              <div class="col col-1">
+                        <div class="comment-box d-flex flex-row">
+                              <div class="profile-thumbnail-wrapper">
                                   <img class="profile-thumbnail" src="{{ comment.owner.profile_picture.url }}" alt="image">
                               </div>
-                              <div class="col col-11">
+                              <div>
                                   {% if song.owner.authentic %}
                                     <i class="fas fa-check-circle"></i>
                                   {% endif %}
                                   <a href="{% url 'accounts:profile'  comment.owner  %}">{{ comment.owner }}</a>
 
-                                  <p class="comment-date" style="margin-top: 0px;margin-bottom: 0px">{{ comment.created_on }}</p>
+                                  <p class="comment-date">{{ comment.created_on }}</p>
                               </div>
                         </div>
                         <div class="row align-items-center justify-content-end">
@@ -138,9 +138,10 @@
                         {% endif %}
                         <br>
                     </div>
-
+                {% comment %}
                 {% empty %}
                     No comments yet!
+                {% endcomment %}
                 {% endfor %}
             </div>
         </div>
