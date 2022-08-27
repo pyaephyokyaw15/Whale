@@ -7,7 +7,7 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 def register(request):
@@ -46,13 +46,9 @@ def setting(request):
 
 def profile(request, username):
     current_user = request.user
+
     if request.method == "GET":
-        try:
-            profile_user = User.objects.get(username=username)
-
-        except User.DoesNotExist:
-            return HttpResponseNotFound("User does not exist")
-
+        profile_user = get_object_or_404(User, username=username)
         favourite_songs = Song.objects.filter(favourite_by=profile_user).all()
         uploaded_songs = Song.objects.filter(owner=profile_user).all()
 

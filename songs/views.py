@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 from django.http import HttpResponseNotFound
+from django.shortcuts import get_object_or_404
 
 domain = 'http://127.0.0.1:8000/'  # change your domain
 
@@ -116,10 +117,7 @@ class SongDeleteView(LoginRequiredMixin, DeleteView):
 
 
 def song_detail(request, pk):
-    try:
-        song = Song.objects.get(pk=pk)
-    except Song.DoesNotExist:
-        return HttpResponseNotFound("Song does not exist")
+    song = get_object_or_404(Song, pk=pk)
 
     mood_query = request.GET.get('mood')
     genre_query = request.GET.get('genre')

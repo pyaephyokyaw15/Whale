@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # my apps
+    # Add our new application
     'songs.apps.SongsConfig',
     'accounts.apps.AccountsConfig',
 
@@ -64,7 +64,12 @@ ROOT_URLCONF = 'whale.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        
+        # Add our templates directories
+        # Django also included default template direcotries
+        # For more info: https://docs.djangoproject.com/en/4.1/topics/templates/
         'DIRS': [BASE_DIR / 'templates'],
+           
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,7 +78,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                # custom context_processors
+                # Add our custom context_processors
                 'songs.context_processors.song_filter',
             ],
         },
@@ -86,10 +91,9 @@ WSGI_APPLICATION = 'whale.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-
-# For those who cloned this repo, I left sqlite as the database in this repo for quick start.
-# You can define any database you like
-# I use PostgreSQL on production.
+# For those who clone and test this repo, I left sqlite as the database in this repo for quick start.
+# You can define any database you like.
+# I use PostgreSQL in production.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -143,8 +147,8 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = BASE_DIR /'media'
 MEDIA_URL = '/media/'
 
-LOGIN_REDIRECT_URL = '/songs'
-LOGIN_URL = '/account/login/'
+LOGIN_REDIRECT_URL = '/songs'  # after successfully login
+LOGIN_URL = '/account/login/'  # for login_required view
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

@@ -49,8 +49,10 @@ class Song(models.Model):
     def __str__(self):
         return self.title
 
+    # This function(name) creates View on Site button  on detail_song when accessing via admin site.
     def get_absolute_url(self):
-        return reverse('songs:songs')
+        # Automatically creates 'View on Site' button  on detail_song when accessing via admin site.
+        return reverse('songs:song_detail', args=[self.id])
 
     @property
     def favourite_count(self):
