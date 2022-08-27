@@ -16,7 +16,7 @@ a {
 .profile-thumbnail {
     width: 35px;
     height: 35px;
-    border-radius: 20px;
+    border-radius: 25px;
     background-color: inherit;
 }
 
@@ -31,6 +31,7 @@ i.fa-heart {
 {
     cursor: pointer;
     font-size: 30px;
+    color: #000000a3;
 
 }
 
@@ -88,7 +89,7 @@ i.fa-heart {
 .song-progress-bar {
     height: 7px;
     width: 0%;
-    background-color: black;
+    background-color: #000000a3;
     border-radius: inherit;
 
 }
@@ -169,7 +170,7 @@ legend {
     outline: none;
     border: 0px;
     background: transparent;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #000000a3;;
 }
 
 .my-delete-button, .my-edit-button, .comment-delete-button, .comment-edit-button {
@@ -178,3 +179,20 @@ legend {
     color: #3c99e5;
 }
 
+.title{
+    color: #000000a3;
+}
+
+.comment-date{
+    color: #000000a3;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.profile-thumbnail-wrapper{
+    margin-right: 10px;
+}
+
+legend{
+    color: #000000b0;
+}

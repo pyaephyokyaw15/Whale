@@ -29,6 +29,16 @@ The main features that have currently been implemented are:
 Due to server costs, I am sorry that I could not release this site public. I am only sharing with my close friends.  
 Here is the demo GIF.
 
+
+## Coming Features
+* UI Resign
+* Shuffle/ Loop songs
+* Timer
+* Notification
+* User Created Playlist
+* Song Recommendation
+* Live Radio
+
 ## Entity–relationship Diagram
 > **Note:** Click and download the image to see details.
 ![Entity–relationship model](https://github.com/pyaephyokyaw15/Whale/blob/main/ERD.png)
